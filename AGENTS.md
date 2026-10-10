@@ -1,0 +1,33 @@
+# AGENTS.md
+
+Static Astro site for YGO Tracker: a bilingual landing page (pt-BR at `/`, English at `/en`) and the app's legal pages, served by Cloudflare as a static-assets Worker (`wrangler.jsonc`) at https://ygotracker.app. See `README.md` for the route map and deploy setup.
+
+## Commands
+
+```bash
+npm run dev            # dev server
+npm run build          # must pass before declaring a change done
+npm run check          # astro check, 0 errors expected
+npm run format:check   # prettier (tabs, single quotes, printWidth 140)
+npx wrangler dev               # Cloudflare routing, _headers, redirects (after build)
+npm run deploy                # build + wrangler deploy to ygotracker.app
+```
+
+## Rules
+
+- **Almost no client JavaScript.** Two inline scripts exist: reveal-on-scroll plus the card spotlight in `src/layouts/Base.astro` (under 1 KB), and the store redirect on `/download`. Prefer CSS (`@property`, `<details>`, scroll timelines) before adding JS.
+- **Motion is decoration, never content.** Anything hidden for a reveal (`data-reveal`) is hidden only under `.js` and `prefers-reduced-motion: no-preference`, so the page reads fully without JS or with reduced motion. Do not put `data-reveal` on the hero H1 (it is the LCP element). Infinite animations must end on a sensible frame or be switched off under reduced motion.
+- **Sections** live in `src/components/sections/`; `Landing.astro` only composes them and builds the JSON-LD. Illustrations in the feature bento are built from the app's UI patterns in HTML/CSS and are `aria-hidden`; the text next to them carries the meaning.
+- **All copy lives in `src/i18n/copy.ts`**, typed by `Copy`; both locales must stay complete. Never hardcode user-facing strings in components.
+- **Copy must match the app.** No card scanning by camera, no live market prices, no trading, no light mode. Do not invent ratings, testimonials or download counts.
+- **Write like a person:** avoid em dashes and stock AI phrasing in copy.
+- **Theme:** only tokens from `src/styles/tokens.css` (they mirror the app's `theme.ts`). Gold on warm black; no purple, cyan or blue accents. Body text that has to pass WCAG AA uses `--color-text-secondary`, never `--color-text-tertiary`.
+- **URLs:** `trailingSlash: 'never'` with `build.format: 'file'`. Cloudflare (`html_handling: auto-trailing-slash`) serves `/privacy` and 307-redirects `/privacy.html` and `/privacy/`. Canonicals are computed in `src/layouts/Base.astro`.
+- **SEO:** each page sets a unique title and description through `Base.astro`. Only the landing page carries hreflang alternates; the sitemap `serialize` hook in `astro.config.mjs` keeps them off the English-only legal pages. Pages that should not be indexed pass `noindex` (no canonical is emitted then).
+- **Store badges** in `public/badges/` are the official artwork; do not restyle or recolor them.
+- **Legal documents** in `src/content/legal/` are the source of truth (moved from the app repo). Update the `Last updated` line when the substance changes.
+- **Domain:** `SITE` in `astro.config.mjs`, `routes` in `wrangler.jsonc` and `ops/legal-redirect/`. Change them together.
+
+## Cloudflare
+
+Cloudflare is folding Pages into Workers; this site is a Workers static-assets project, not Pages. Your knowledge of both may be outdated; check https://developers.cloudflare.com/workers/static-assets/ before changing `wrangler.jsonc`, `_headers`, `_redirects` or the deploy workflow.

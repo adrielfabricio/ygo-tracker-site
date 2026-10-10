@@ -1,0 +1,448 @@
+---
+/**
+ * The app's Dashboard (ygo-tracker/src/app/(tabs)/index.tsx) rebuilt in HTML and CSS, with the
+ * same tokens and strings. Sharp at any density, no card artwork, and nothing to download for the
+ * hero. Exposed to assistive tech as a single image with a description.
+ */
+import { Image } from 'astro:assets';
+
+import eyeGlyph from '../assets/eye-glyph.png';
+import { COPY } from '../i18n/copy';
+import type { Locale } from '../i18n/locales';
+import Icon from './Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+const mock = copy.mock;
+const percent = (owned: number, total: number) => Math.round((owned / total) * 100);
+const fmt = new Intl.NumberFormat(locale === 'pt-br' ? 'pt-BR' : 'en-US');
+const tabs = ['grid', 'layers-outline', 'cube-outline', 'heart-outline', 'search-outline'] as const;
+---
+
+<figure class="phone" role="img" aria-label={copy.a11y.mockupLabel}>
+	<div class="screen">
+		<div class="status">
+			<span>9:41</span>
+			<span class="island"></span>
+			<span class="status-icons"></span>
+		</div>
+
+		<header class="head">
+			<div>
+				<p class="welcome">{mock.welcomeEyebrow}</p>
+				<p class="duelist">{mock.welcomeTitle}</p>
+			</div>
+			<span class="glass">
+				<Icon name="settings-outline" size={18} />
+			</span>
+		</header>
+
+		<div class="total">
+			<p class="total-label">{mock.collectionTotal}</p>
+			<p class="total-metrics">
+				<span class="total-owned count" style={`--to:${mock.owned}`}></span>
+				<span class="total-all">/ {fmt.format(mock.total)}</span>
+			</p>
+			<div class="total-track">
+				<span style={`width:${percent(mock.owned, mock.total)}%`}></span>
+			</div>
+		</div>
+
+		<div class="tiles">
+			<div class="tile">
+				<p class="tile-title">{mock.activeDecks}</p>
+				<p class="tile-value gold count" style={`--to:${mock.activeDecksValue}`}></p>
+				<p class="tile-info">{mock.archived}</p>
+			</div>
+			<div class="tile">
+				<p class="tile-title">{mock.cardsMissing}</p>
+				<p class="tile-value count" style={`--to:${mock.cardsMissingValue}`}></p>
+				<p class="tile-info">{mock.acrossAllDecks}</p>
+			</div>
+			<div class="tile tile-wide">
+				<p class="tile-title">{mock.estimatedRemaining}</p>
+				<p class="tile-value muted">{mock.estimatedValue}</p>
+				<p class="tile-info">{mock.basedOn}</p>
+			</div>
+		</div>
+
+		<div class="decks-head">
+			<p class="decks-title">{mock.yourDecks}</p>
+			<span class="new-deck">
+				<Icon name="add" size={14} />
+				{mock.newDeck}
+			</span>
+		</div>
+
+		<ul class="decks">
+			{mock.decks.map((deck) => (
+				<li class="deck">
+					<Image src={eyeGlyph} alt="" width={88} height={88} class="deck-thumb" loading="eager" />
+					<div class="deck-body">
+						<p class="deck-name">{deck.name}</p>
+						<div class="deck-track">
+							<span style={`width:${percent(deck.owned, deck.total)}%`} />
+						</div>
+						<p class="deck-count">
+							{deck.owned}/{deck.total} {mock.cardsUnit}
+						</p>
+					</div>
+				</li>
+			))}
+		</ul>
+
+		<nav class="tabbar">
+			{tabs.map((name, i) => (
+				<span class:list={['tab', { active: i === 0 }]}>
+					<Icon name={name} size={18} />
+				</span>
+			))}
+		</nav>
+	</div>
+</figure>
+
+<style>
+	.phone {
+		position: relative;
+		width: 300px;
+		margin: 0;
+		padding: 10px;
+		border-radius: 48px;
+		background: linear-gradient(160deg, #2a2318, #0d0b08 40%, #1e190d);
+		box-shadow:
+			0 0 0 1px rgba(227, 184, 75, 0.25),
+			0 30px 80px rgba(0, 0, 0, 0.6),
+			0 0 60px rgba(227, 184, 75, 0.12);
+	}
+
+	.screen {
+		position: relative;
+		aspect-ratio: 9 / 19.5;
+		overflow: hidden;
+		padding: 0 14px;
+		border-radius: 38px;
+		background: var(--gradient-screen);
+		color: var(--color-text);
+		font-size: 11px;
+		line-height: 1.35;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	.status {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 38px;
+		padding: 0 10px;
+		font-size: 11px;
+		font-weight: 600;
+	}
+
+	.island {
+		width: 76px;
+		height: 22px;
+		border-radius: 12px;
+		background: #000;
+	}
+
+	.status-icons {
+		width: 34px;
+		height: 9px;
+		border-radius: 3px;
+		background: linear-gradient(90deg, var(--color-text) 70%, var(--color-text-tertiary) 70%);
+	}
+
+	.head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 6px 0 12px;
+	}
+
+	.welcome {
+		color: rgba(227, 184, 75, 0.75);
+		font-size: 8.5px;
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+	}
+
+	.duelist {
+		font-family: var(--font-display);
+		font-size: 20px;
+		line-height: 1.2;
+	}
+
+	.glass {
+		display: grid;
+		place-items: center;
+		width: 32px;
+		height: 32px;
+		border: 1px solid rgba(227, 184, 75, 0.4);
+		border-radius: 50%;
+		background: rgba(227, 184, 75, 0.12);
+		color: var(--color-primary);
+	}
+
+	.total {
+		padding: 14px;
+		border: 1px solid var(--border-highlight);
+		border-radius: 16px;
+		background: var(--gradient-primary);
+		color: var(--color-on-primary);
+	}
+
+	.total-label {
+		color: rgba(24, 19, 7, 0.7);
+		font-size: 8.5px;
+		font-weight: 500;
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+	}
+
+	.total-metrics {
+		display: flex;
+		align-items: baseline;
+		gap: 6px;
+		margin-top: 2px;
+	}
+
+	.total-owned {
+		font-family: var(--font-display);
+		font-size: 30px;
+		font-weight: 700;
+		line-height: 1.1;
+	}
+
+	.total-all {
+		color: rgba(24, 19, 7, 0.7);
+		font-size: 11px;
+		font-weight: 600;
+	}
+
+	.total-track {
+		height: 5px;
+		margin-top: 12px;
+		overflow: hidden;
+		border-radius: 3px;
+		background: rgba(24, 19, 7, 0.25);
+	}
+
+	.total-track span {
+		display: block;
+		height: 100%;
+		border-radius: 3px;
+		background: var(--color-on-primary);
+	}
+
+	.tiles {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+		margin-top: 8px;
+	}
+
+	.tile {
+		padding: 10px;
+		border: 1px solid var(--border-primary);
+		border-radius: var(--radius-tile);
+		background: var(--color-card);
+		box-shadow: var(--glow-tile);
+	}
+
+	.tile-wide {
+		grid-column: 1 / -1;
+		border-color: rgba(227, 184, 75, 0.3);
+		box-shadow: var(--glow-highlight);
+	}
+
+	.tile-title {
+		color: var(--color-text-secondary);
+		font-size: 9px;
+	}
+
+	.tile-value {
+		margin: 2px 0;
+		font-family: var(--font-display);
+		font-size: 20px;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	.tile-value.gold {
+		color: var(--color-primary);
+	}
+
+	.tile-value.muted {
+		color: var(--color-primary-muted);
+	}
+
+	.tile-info {
+		color: var(--color-text-secondary);
+		font-size: 8px;
+	}
+
+	.decks-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 14px 0 8px;
+	}
+
+	.decks-title {
+		font-family: var(--font-display);
+		font-size: 13px;
+		letter-spacing: 0.03em;
+	}
+
+	.new-deck {
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+		color: var(--color-primary);
+		font-size: 10px;
+		font-weight: 700;
+	}
+
+	.decks {
+		display: grid;
+		gap: 6px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.deck {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 8px;
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-card);
+		background: var(--color-card);
+	}
+
+	.deck-thumb {
+		flex: none;
+		width: 34px;
+		height: 34px;
+		padding: 4px;
+		border-radius: 8px;
+		background: var(--color-element);
+	}
+
+	.deck-body {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.deck-name {
+		font-size: 11px;
+		font-weight: 600;
+	}
+
+	.deck-track {
+		height: 4px;
+		margin: 5px 0 3px;
+		overflow: hidden;
+		border-radius: 3px;
+		background: var(--progress-track);
+	}
+
+	.deck-track span {
+		display: block;
+		height: 100%;
+		border-radius: 3px;
+		background: var(--gradient-progress);
+	}
+
+	.deck-count {
+		color: var(--color-text-secondary);
+		font-size: 8.5px;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.tabbar {
+		position: absolute;
+		right: 0;
+		bottom: 18px;
+		left: 0;
+		display: flex;
+		justify-content: space-around;
+		width: 88%;
+		height: 46px;
+		margin: 0 auto;
+		padding: 5px;
+		border: 1px solid rgba(227, 184, 75, 0.18);
+		border-radius: 23px;
+		background: rgba(13, 11, 8, 0.78);
+		backdrop-filter: blur(12px);
+		color: var(--color-text-secondary);
+	}
+
+	.tab {
+		display: grid;
+		flex: 1;
+		place-items: center;
+		border-radius: 18px;
+	}
+
+	.tab.active {
+		background: rgba(227, 184, 75, 0.12);
+		color: var(--color-primary);
+	}
+
+	/*
+	 * Numbers count up and bars fill once, like the app settling after launch. The integer is a
+	 * registered custom property, so the counter animates without JavaScript.
+	 */
+	@property --num {
+		syntax: '<integer>';
+		initial-value: 0;
+		inherits: false;
+	}
+
+	.count {
+		counter-reset: num var(--num);
+		animation: count-up 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s both;
+	}
+
+	.count::after {
+		content: counter(num);
+	}
+
+	@keyframes count-up {
+		from {
+			--num: 0;
+		}
+		to {
+			--num: var(--to);
+		}
+	}
+
+	.total-track span,
+	.deck-track span {
+		transform-origin: 0 50%;
+		animation: bar-fill 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.6s both;
+	}
+
+	.deck:nth-child(2) .deck-track span {
+		animation-delay: 0.75s;
+	}
+
+	.deck:nth-child(3) .deck-track span {
+		animation-delay: 0.9s;
+	}
+
+	@keyframes bar-fill {
+		from {
+			transform: scaleX(0);
+		}
+	}
+</style>

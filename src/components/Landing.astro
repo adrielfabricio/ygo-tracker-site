@@ -1,0 +1,73 @@
+---
+import { APP_CATEGORY, APP_NAME, AUTHOR, appStoreUrl, playStoreUrl } from '../config/site';
+import { COPY } from '../i18n/copy';
+import { LOCALES, LOCALE_META, type Locale } from '../i18n/locales';
+import Base from '../layouts/Base.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import Faq from './sections/Faq.astro';
+import Features from './sections/Features.astro';
+import FinalCta from './sections/FinalCta.astro';
+import Hero from './sections/Hero.astro';
+import Plans from './sections/Plans.astro';
+import Problem from './sections/Problem.astro';
+import Ribbon from './sections/Ribbon.astro';
+import Steps from './sections/Steps.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+const site = Astro.site!;
+const homeUrl = new URL(LOCALE_META[locale].home, site).href;
+
+const jsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'MobileApplication',
+		name: APP_NAME,
+		description: copy.meta.description,
+		url: homeUrl,
+		image: new URL('/icon-512.png', site).href,
+		operatingSystem: 'iOS, Android',
+		applicationCategory: APP_CATEGORY,
+		inLanguage: LOCALES.map((l) => LOCALE_META[l].htmlLang),
+		installUrl: [appStoreUrl(locale, 'hero'), playStoreUrl(locale, 'hero')],
+		offers: { '@type': 'Offer', price: '0', priceCurrency: locale === 'pt-br' ? 'BRL' : 'USD' },
+		author: { '@type': 'Person', name: AUTHOR },
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: APP_NAME,
+		url: new URL('/', site).href,
+		inLanguage: LOCALE_META[locale].htmlLang,
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: copy.faq.items.map((item) => ({
+			'@type': 'Question',
+			name: item.question,
+			acceptedAnswer: { '@type': 'Answer', text: item.answer },
+		})),
+	},
+];
+---
+
+<Base locale={locale} title={copy.meta.title} description={copy.meta.description} alternates jsonLd={jsonLd}>
+	<Header locale={locale} sections />
+	<main id="main">
+		<Hero locale={locale} />
+		<Ribbon locale={locale} />
+		<Problem locale={locale} />
+		<Features locale={locale} />
+		<Steps locale={locale} />
+		<Plans locale={locale} />
+		<Faq locale={locale} />
+		<FinalCta locale={locale} />
+	</main>
+	<Footer locale={locale} />
+</Base>

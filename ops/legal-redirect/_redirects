@@ -1,0 +1,6 @@
+# Deployed once to the old Cloudflare Pages project `ygo-tracker-legal`, replacing the legal pages
+# it used to host. Every old URL, with or without `.html`, moves permanently to the site.
+/privacy.html  https://ygotracker.app/privacy  301
+/terms.html    https://ygotracker.app/terms    301
+/support.html  https://ygotracker.app/support  301
+/*             https://ygotracker.app/:splat   301

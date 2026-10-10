@@ -1,0 +1,162 @@
+---
+import { Image } from 'astro:assets';
+
+import eyeGlyph from '../assets/eye-glyph.png';
+import { COPY } from '../i18n/copy';
+import { LOCALES, LOCALE_META, type Locale } from '../i18n/locales';
+
+interface Props {
+	locale: Locale;
+	/** In-page section links; only the landing page has those sections. */
+	sections?: boolean;
+}
+
+const { locale, sections = false } = Astro.props;
+const copy = COPY[locale];
+const home = LOCALE_META[locale].home;
+const other = LOCALES.find((l) => l !== locale)!;
+const anchor = (id: string) => (sections ? `#${id}` : `${home}#${id}`);
+---
+
+<header class="header">
+	<div class="container bar">
+		<a class="brand" href={home} aria-label={copy.a11y.home}>
+			<Image src={eyeGlyph} alt="" width={64} height={64} loading="eager" class="brand-mark" />
+			<span class="brand-name">YGO Tracker</span>
+		</a>
+
+		<nav class="nav" aria-label={copy.a11y.mainNav}>
+			<a href={anchor('features')}>{copy.nav.features}</a>
+			<a href={anchor('pricing')}>{copy.nav.plans}</a>
+			<a href={anchor('faq')}>{copy.nav.faq}</a>
+		</nav>
+
+		<div class="actions">
+			<a class="lang" href={LOCALE_META[other].home} hreflang={LOCALE_META[other].htmlLang} lang={LOCALE_META[other].htmlLang}>
+				{other === 'en' ? 'EN' : 'PT'}
+				<span class="sr-only"> · {LOCALE_META[other].nativeName}</span>
+			</a>
+			<a class="cta" href={anchor('download')}>
+				{copy.nav.download}
+			</a>
+		</div>
+	</div>
+</header>
+
+<style>
+	.header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		border-bottom: 1px solid var(--border-subtle);
+		background: rgba(13, 11, 8, 0.8);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+	}
+
+	.bar {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+		height: 64px;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		margin-right: auto;
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.brand-mark {
+		width: 32px;
+		height: 32px;
+	}
+
+	.brand-name {
+		font-family: var(--font-display);
+		font-size: 0.9375rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	/* The link keeps its aria-label; on the narrowest phones the eye alone is the logo. */
+	@media (max-width: 359px) {
+		.brand-name {
+			display: none;
+		}
+	}
+
+	@media (min-width: 480px) {
+		.brand-name {
+			font-size: 1rem;
+			letter-spacing: 0.12em;
+		}
+	}
+
+	.nav {
+		display: none;
+		gap: var(--space-4);
+	}
+
+	.nav a {
+		color: var(--color-text-secondary);
+		font-size: 0.9375rem;
+		text-decoration: none;
+	}
+
+	.nav a:hover {
+		color: var(--color-text);
+	}
+
+	@media (min-width: 860px) {
+		.nav {
+			display: flex;
+		}
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	.lang,
+	.cta {
+		display: inline-grid;
+		place-items: center;
+		min-width: 48px;
+		height: 44px;
+		padding: 0 var(--space-3);
+		border-radius: var(--radius-button);
+		font-size: 0.875rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.lang {
+		border: 1px solid var(--border-primary);
+		color: var(--color-text-secondary);
+		letter-spacing: 0.08em;
+	}
+
+	.lang:hover {
+		border-color: var(--border-highlight);
+		color: var(--color-text);
+	}
+
+	.cta {
+		background: var(--gradient-primary);
+		box-shadow: var(--glow-cta);
+		color: var(--color-on-primary);
+	}
+
+	.cta:hover {
+		color: var(--color-on-primary);
+		filter: brightness(1.08);
+	}
+</style>

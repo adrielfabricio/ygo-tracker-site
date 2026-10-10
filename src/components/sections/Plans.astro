@@ -1,0 +1,234 @@
+---
+/**
+ * Free and Lifetime Access side by side. Premium gets a foil frame, like a rare card; each plan
+ * wears a rarity tag as a nod to collectors.
+ */
+import { COPY } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locales';
+import Icon from '../Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+const plans = [
+	{ ...copy.plans.free, seal: undefined, premium: false },
+	{ ...copy.plans.premium, premium: true },
+];
+---
+
+<section class="section plans" id="pricing" aria-labelledby="plans-title">
+	<div class="container">
+		<div class="section-head" data-reveal>
+			<p class="eyebrow">{copy.plans.eyebrow}</p>
+			<h2 id="plans-title">{copy.plans.title}</h2>
+			<p>{copy.plans.lead}</p>
+		</div>
+
+		<div class="plan-grid">
+			{plans.map((plan, index) => (
+				<article class:list={['plan', { premium: plan.premium }]} data-reveal style={`--delay:${index * 0.12}s`}>
+					<div class="plan-body">
+						<header class="plan-head">
+							<span class="rarity">{plan.rarity}</span>
+							{plan.seal && <span class="seal">{plan.seal}</span>}
+						</header>
+						<h3>{plan.name}</h3>
+						<p class="plan-price">{plan.price}</p>
+						<p class="plan-tagline">{plan.tagline}</p>
+						<ul class="plan-lines">
+							{plan.lines.map((line) => (
+								<li class:list={{ off: !line.included }}>
+									<Icon name={line.included ? 'checkmark' : 'remove'} size={18} />
+									<span class="sr-only">{line.included ? copy.a11y.included : copy.a11y.notIncluded}:</span>
+									{line.text}
+								</li>
+							))}
+						</ul>
+					</div>
+				</article>
+			))}
+		</div>
+		<p class="plan-note">{copy.plans.note}</p>
+	</div>
+</section>
+
+<style>
+	.plans {
+		background: radial-gradient(ellipse 50% 50% at 70% 60%, rgba(227, 184, 75, 0.08), transparent 70%), var(--color-sheet);
+	}
+
+	.plan-grid {
+		display: grid;
+		gap: var(--space-4);
+		max-width: 900px;
+	}
+
+	@media (min-width: 760px) {
+		.plan-grid {
+			grid-template-columns: repeat(2, 1fr);
+			align-items: center;
+		}
+	}
+
+	.plan {
+		position: relative;
+		border: 1px solid var(--border-primary);
+		border-radius: var(--radius-hero);
+		background: var(--color-card);
+	}
+
+	.plan-body {
+		position: relative;
+		display: grid;
+		align-content: start;
+		gap: var(--space-2);
+		padding: var(--space-5) var(--space-4);
+	}
+
+	/* Foil frame: a conic gradient spun through a registered angle, masked to a 2px ring. */
+	@property --angle {
+		syntax: '<angle>';
+		initial-value: 0deg;
+		inherits: false;
+	}
+
+	.plan.premium {
+		border-color: transparent;
+		background: linear-gradient(160deg, #1e190d, var(--color-card) 50%);
+		box-shadow:
+			0 0 50px rgba(227, 184, 75, 0.18),
+			0 24px 60px rgba(0, 0, 0, 0.4);
+	}
+
+	@media (min-width: 760px) {
+		.plan.premium {
+			scale: 1.04;
+		}
+	}
+
+	.plan.premium::before {
+		content: '';
+		position: absolute;
+		inset: -1px;
+		padding: 2px;
+		border-radius: inherit;
+		background: conic-gradient(from var(--angle), #8b6914, #f2d07e, #fff1c4, #e3b84b, #b0862c, #f2d07e, #8b6914);
+		mask:
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		mask-composite: exclude;
+		animation: foil-spin 6s linear infinite;
+		pointer-events: none;
+	}
+
+	@keyframes foil-spin {
+		to {
+			--angle: 360deg;
+		}
+	}
+
+	/* Holographic sweep on hover. */
+	.plan.premium::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(115deg, transparent 35%, rgba(255, 241, 196, 0.1) 45%, rgba(242, 208, 126, 0.16) 50%, transparent 60%);
+		background-size: 250% 100%;
+		background-position: 100% 0;
+		transition: background-position 1.1s ease;
+		pointer-events: none;
+	}
+
+	.plan.premium:hover::after {
+		background-position: 0 0;
+	}
+
+	.plan-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-2);
+		margin-bottom: var(--space-2);
+	}
+
+	.rarity {
+		padding: 3px 10px;
+		border: 1px solid var(--border-primary);
+		border-radius: 6px;
+		color: var(--color-text-secondary);
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.premium .rarity {
+		border-color: var(--border-highlight);
+		color: var(--color-primary-muted);
+	}
+
+	.seal {
+		padding: 4px 12px;
+		border-radius: var(--radius-pill);
+		background: var(--gradient-primary);
+		color: var(--color-on-primary);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	h3 {
+		font-size: 1.375rem;
+	}
+
+	.plan-price {
+		color: var(--color-primary-muted);
+		font-family: var(--font-display);
+		font-size: 1.875rem;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	.plan-tagline {
+		margin-bottom: var(--space-3);
+		color: var(--color-text-secondary);
+	}
+
+	.plan-lines {
+		display: grid;
+		gap: var(--space-2h);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.plan-lines li {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--space-2h);
+	}
+
+	.plan-lines :global(.icon) {
+		flex: none;
+		margin-top: 3px;
+		color: var(--color-primary);
+	}
+
+	.plan-lines li.off,
+	.plan-lines li.off :global(.icon) {
+		color: var(--color-text-secondary);
+	}
+
+	.plan-note {
+		max-width: 900px;
+		margin-top: var(--space-5);
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+</style>

@@ -1,0 +1,57 @@
+---
+import { appStoreUrl, playStoreUrl, type Placement } from '../config/site';
+import { COPY } from '../i18n/copy';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+	locale: Locale;
+	placement: Placement;
+	/** Above-the-fold badges load eagerly. */
+	eager?: boolean;
+	class?: string;
+}
+
+const { locale, placement, eager = false, class: className } = Astro.props;
+const copy = COPY[locale];
+const loading = eager ? 'eager' : 'lazy';
+---
+
+<!-- Official artwork, unmodified: Apple and Google forbid restyling the badges. -->
+<ul class:list={['badges', className]} aria-label={copy.a11y.storeLinks}>
+	<li>
+		<a href={appStoreUrl(locale, placement)} rel="noopener" data-store="app-store">
+			<img src={`/badges/app-store-${locale}.svg`} alt={copy.a11y.appStoreAlt} width="144" height="48" loading={loading} />
+		</a>
+	</li>
+	<li>
+		<a href={playStoreUrl(locale, placement)} rel="noopener" data-store="google-play">
+			<img src={`/badges/google-play-${locale}.png`} alt={copy.a11y.playStoreAlt} width="162" height="48" loading={loading} />
+		</a>
+	</li>
+</ul>
+
+<style>
+	.badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2h);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	a {
+		display: block;
+		border-radius: 10px;
+		transition: transform 0.15s ease;
+	}
+
+	a:hover {
+		transform: translateY(-2px);
+	}
+
+	img {
+		height: 48px;
+		width: auto;
+	}
+</style>

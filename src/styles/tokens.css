@@ -1,0 +1,76 @@
+/*
+ * Mirrors ygo-tracker/src/global/theme/theme.ts and docs/standards/styling-and-theme.md.
+ * The app is dark only, gold on warm olive-black. No purple, cyan or blue accents.
+ */
+:root {
+	color-scheme: dark;
+
+	/* Surfaces */
+	--color-canvas: #0d0b08;
+	--color-sheet: #12100b;
+	--color-card: #17140f;
+	--color-input: #1e1a12;
+	--color-element: #241f16;
+	--color-selected: #2a2318;
+
+	/* Text */
+	--color-text: #f3ede1;
+	--color-text-secondary: rgba(243, 237, 225, 0.55);
+	--color-text-tertiary: rgba(243, 237, 225, 0.4);
+
+	/* Gold */
+	--color-primary: #e3b84b;
+	--color-primary-dark: #b0862c;
+	--color-primary-muted: #f2d07e;
+	--color-primary-tint: rgba(227, 184, 75, 0.14);
+	--color-on-primary: #181307;
+
+	/* Borders */
+	--border-subtle: rgba(227, 184, 75, 0.1);
+	--border-primary: rgba(227, 184, 75, 0.2);
+	--border-highlight: rgba(227, 184, 75, 0.35);
+
+	/* Gradients */
+	--gradient-primary: linear-gradient(150deg, #e3b84b 15%, #b0862c 85%);
+	--gradient-progress: linear-gradient(90deg, #b0862c, #f2d07e);
+	--gradient-screen: linear-gradient(180deg, #1e190d 0%, #14110c 18%, #100e09 48%, #0d0b08 100%);
+	--gradient-gold-wash: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(227, 184, 75, 0.14), transparent 70%);
+	--progress-track: rgba(243, 237, 225, 0.08);
+
+	/* Glows */
+	--glow-cta: 0 4px 20px rgba(227, 184, 75, 0.4);
+	--glow-tile: 0 0 15px rgba(227, 184, 75, 0.14);
+	--glow-highlight: 0 0 20px rgba(227, 184, 75, 0.15);
+
+	/* Radii */
+	--radius-tile: 8px;
+	--radius-card: 12px;
+	--radius-button: 14px;
+	--radius-panel: 18px;
+	--radius-hero: 20px;
+	--radius-pill: 999px;
+
+	/* Spacing (theme.ts Spacing) */
+	--space-half: 2px;
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-2h: 12px;
+	--space-3: 16px;
+	--space-4: 24px;
+	--space-5: 32px;
+	--space-6: 64px;
+
+	/* Type */
+	--font-display: var(--font-cinzel), Georgia, serif;
+	--font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+	/* Layout */
+	--content-width: 1120px;
+	--gutter: 16px;
+}
+
+@media (min-width: 768px) {
+	:root {
+		--gutter: 32px;
+	}
+}

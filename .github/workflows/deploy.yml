@@ -1,0 +1,39 @@
+# Deploy the site to Cloudflare (static-assets Worker `ygo-tracker-site`, see wrangler.jsonc).
+# Pushes to main publish to https://ygotracker.app; develop only runs CI.
+# Secrets (repo → Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN  — Cloudflare API token: Workers Scripts Edit, Workers Routes Edit, Zone Read
+#   CLOUDFLARE_ACCOUNT_ID — Cloudflare account id
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy to Cloudflare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy ygo-tracker-site
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

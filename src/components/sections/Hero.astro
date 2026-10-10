@@ -1,0 +1,386 @@
+---
+import { COPY } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locales';
+import CardBack from '../CardBack.astro';
+import Icon from '../Icon.astro';
+import PhoneMockup from '../PhoneMockup.astro';
+import StoreBadges from '../StoreBadges.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+
+// The browser would break the game's name at a hyphen; keep it whole (and gilded).
+const GAME_NAME = 'Yu-Gi-Oh!';
+const titleParts = copy.hero.title.split(GAME_NAME);
+
+// Ring ornaments: twelve marks around the circle, alternating diamonds and bars.
+const marks = Array.from({ length: 12 }, (_, i) => ({ angle: i * 30, diamond: i % 2 === 0 }));
+
+// Gold embers rising behind the stage. Seeded, so every build renders the same field.
+let seed = 7;
+const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+const embers = Array.from({ length: 16 }, () => ({
+	left: Math.round(rand() * 100),
+	size: (2 + rand() * 3).toFixed(1),
+	duration: (9 + rand() * 9).toFixed(1),
+	delay: (-rand() * 18).toFixed(1),
+	drift: Math.round(rand() * 60 - 30),
+}));
+---
+
+<section class="hero">
+	<div class="embers" aria-hidden="true">
+		{embers.map((e) => (
+			<span style={`--left:${e.left}%;--size:${e.size}px;--duration:${e.duration}s;--delay:${e.delay}s;--drift:${e.drift}px`} />
+		))}
+	</div>
+
+	<div class="container hero-grid">
+		<div class="hero-copy">
+			<p class="eyebrow">{copy.hero.eyebrow}</p>
+			<h1>
+				{titleParts.map((part, index) => (
+					<Fragment>
+						{part}
+						{index < titleParts.length - 1 && <span class="nowrap gold-text">{GAME_NAME}</span>}
+					</Fragment>
+				))}
+			</h1>
+			<p class="lead">{copy.hero.lead}</p>
+			<StoreBadges locale={locale} placement="hero" eager />
+			<p class="hero-note">{copy.hero.note}</p>
+		</div>
+
+		<div class="stage">
+			<svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
+				<g class="ring-outer">
+					<circle cx="200" cy="200" r="194" class="line faint" />
+					<circle cx="200" cy="200" r="184" class="line dotted" />
+					{marks.map((mark) => (
+						<g transform={`rotate(${mark.angle} 200 200)`}>
+							{mark.diamond ? (
+								<rect x="196" y="12" width="8" height="8" transform="rotate(45 200 16)" class="mark" />
+							) : (
+								<rect x="199" y="8" width="2" height="16" class="mark" />
+							)}
+						</g>
+					))}
+				</g>
+				<g class="ring-inner">
+					<circle cx="200" cy="200" r="160" class="line dashed" />
+					<circle cx="200" cy="200" r="140" class="line faint" />
+				</g>
+			</svg>
+			<div class="aura" aria-hidden="true"></div>
+			<CardBack class="fan fan-left" />
+			<CardBack class="fan fan-right" />
+			<div class="phone-float">
+				<PhoneMockup locale={locale} />
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<ul class="trust">
+			{copy.trust.map((item, index) => (
+				<li data-reveal style={`--delay:${index * 0.08}s`}>
+					<Icon name="checkmark" size={16} />
+					{item}
+				</li>
+			))}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		padding-block: 40px 48px;
+		overflow: hidden;
+		background:
+			radial-gradient(ellipse 60% 50% at 75% 40%, rgba(227, 184, 75, 0.12), transparent 70%), var(--gradient-gold-wash),
+			var(--gradient-screen);
+	}
+
+	@media (min-width: 960px) {
+		.hero {
+			padding-block: 72px 56px;
+		}
+	}
+
+	.hero-grid {
+		position: relative;
+		display: grid;
+		gap: 40px;
+		align-items: center;
+	}
+
+	@media (min-width: 960px) {
+		.hero-grid {
+			grid-template-columns: 1.1fr 1fr;
+		}
+	}
+
+	.hero-copy {
+		display: grid;
+		gap: var(--space-4);
+		justify-items: start;
+	}
+
+	h1 {
+		font-size: clamp(2.125rem, 1.4rem + 3.4vw, 3.625rem);
+		font-weight: 700;
+		line-height: 1.1;
+	}
+
+	.nowrap {
+		white-space: nowrap;
+	}
+
+	.lead {
+		max-width: 34rem;
+		color: var(--color-text-secondary);
+		font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+	}
+
+	.hero-note {
+		margin-top: calc(-1 * var(--space-2));
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+
+	/* Stage: rotating ring, aura, a fan of cards and the floating phone. */
+	.stage {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-height: 560px;
+		isolation: isolate;
+	}
+
+	@media (min-width: 960px) {
+		.stage {
+			min-height: 660px;
+		}
+	}
+
+	.ring {
+		position: absolute;
+		z-index: -2;
+		width: min(560px, 135%);
+		height: auto;
+		overflow: visible;
+	}
+
+	.line {
+		fill: none;
+		stroke: #e3b84b;
+	}
+
+	.faint {
+		stroke-opacity: 0.18;
+		stroke-width: 1;
+	}
+
+	.dotted {
+		stroke-opacity: 0.45;
+		stroke-width: 1.5;
+		stroke-dasharray: 1 7;
+		stroke-linecap: round;
+	}
+
+	.dashed {
+		stroke-opacity: 0.22;
+		stroke-width: 1;
+		stroke-dasharray: 36 10;
+	}
+
+	.mark {
+		fill: #e3b84b;
+		fill-opacity: 0.6;
+	}
+
+	.ring-outer,
+	.ring-inner {
+		transform-origin: 200px 200px;
+		transform-box: view-box;
+	}
+
+	.ring-outer {
+		animation: spin 90s linear infinite;
+	}
+
+	.ring-inner {
+		animation: spin 120s linear infinite reverse;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	.aura {
+		position: absolute;
+		z-index: -1;
+		width: 360px;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: radial-gradient(circle, rgba(227, 184, 75, 0.28), rgba(227, 184, 75, 0.06) 45%, transparent 70%);
+		filter: blur(10px);
+		animation: breathe 7s ease-in-out infinite;
+	}
+
+	@keyframes breathe {
+		0%,
+		100% {
+			opacity: 0.7;
+			transform: scale(0.94);
+		}
+		50% {
+			opacity: 1;
+			transform: scale(1.06);
+		}
+	}
+
+	.stage :global(.fan) {
+		position: absolute;
+		z-index: -1;
+		width: 150px;
+	}
+
+	.stage :global(.fan-left) {
+		--sheen-delay: 1.2s;
+		translate: -128px 30px;
+		rotate: -16deg;
+		animation: float-a 8s ease-in-out infinite;
+	}
+
+	.stage :global(.fan-right) {
+		--sheen-delay: 3.4s;
+		translate: 132px 70px;
+		rotate: 13deg;
+		animation: float-b 9s ease-in-out infinite;
+	}
+
+	@media (min-width: 960px) {
+		.stage :global(.fan) {
+			width: 180px;
+		}
+
+		.stage :global(.fan-left) {
+			translate: -170px 20px;
+		}
+
+		.stage :global(.fan-right) {
+			translate: 175px 80px;
+		}
+	}
+
+	@keyframes float-a {
+		0%,
+		100% {
+			transform: translateY(0) rotate(0deg);
+		}
+		50% {
+			transform: translateY(-14px) rotate(-2deg);
+		}
+	}
+
+	@keyframes float-b {
+		0%,
+		100% {
+			transform: translateY(0) rotate(0deg);
+		}
+		50% {
+			transform: translateY(-18px) rotate(2deg);
+		}
+	}
+
+	.phone-float {
+		animation: float-phone 7s ease-in-out infinite;
+	}
+
+	@keyframes float-phone {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
+	}
+
+	/* Embers: tiny gold sparks drifting up through the hero. */
+	.embers {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.embers span {
+		position: absolute;
+		bottom: -10px;
+		left: var(--left);
+		width: var(--size);
+		height: var(--size);
+		border-radius: 50%;
+		background: #f2d07e;
+		box-shadow: 0 0 8px 2px rgba(227, 184, 75, 0.55);
+		opacity: 0;
+		animation: rise var(--duration) linear var(--delay) infinite;
+	}
+
+	@keyframes rise {
+		0% {
+			opacity: 0;
+			transform: translate(0, 0);
+		}
+		15% {
+			opacity: 0.8;
+		}
+		80% {
+			opacity: 0.4;
+		}
+		100% {
+			opacity: 0;
+			transform: translate(var(--drift), -110vh);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.embers {
+			display: none;
+		}
+	}
+
+	.trust {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2) var(--space-2h);
+		margin: 32px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.trust li {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: 8px 14px;
+		border: 1px solid var(--border-primary);
+		border-radius: var(--radius-pill);
+		background: rgba(23, 20, 15, 0.7);
+		backdrop-filter: blur(6px);
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+
+	.trust :global(.icon) {
+		color: var(--color-primary);
+	}
+</style>

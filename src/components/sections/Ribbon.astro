@@ -1,0 +1,90 @@
+---
+/**
+ * A tilted band of feature keywords scrolling sideways. The list is rendered twice so the loop is
+ * seamless; the copy is hidden from assistive tech (it repeats what the page already says).
+ */
+import { Image } from 'astro:assets';
+
+import eyeGlyph from '../../assets/eye-glyph.png';
+import { COPY } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locales';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const words = COPY[locale].ribbon;
+---
+
+<div class="ribbon" aria-hidden="true">
+	<div class="track">
+		{[0, 1].map(() => (
+			<ul>
+				{words.map((word) => (
+					<li>
+						<span>{word}</span>
+						<Image src={eyeGlyph} alt="" width={48} height={48} class="sep" />
+					</li>
+				))}
+			</ul>
+		))}
+	</div>
+</div>
+
+<style>
+	.ribbon {
+		position: relative;
+		z-index: 1;
+		margin-block: -18px;
+		overflow: hidden;
+		border-block: 1px solid var(--border-highlight);
+		background: linear-gradient(90deg, #1e190d, #17140f 50%, #1e190d);
+		box-shadow: 0 0 40px rgba(227, 184, 75, 0.08);
+		rotate: -1.5deg;
+		scale: 1.02;
+	}
+
+	.track {
+		display: flex;
+		width: max-content;
+		animation: marquee 40s linear infinite;
+	}
+
+	.ribbon:hover .track {
+		animation-play-state: paused;
+	}
+
+	ul {
+		display: flex;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 28px;
+		padding: 16px 0 16px 28px;
+		color: var(--color-primary-muted);
+		font-family: var(--font-display);
+		font-size: 1.0625rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	li :global(.sep) {
+		width: 24px;
+		height: 24px;
+		opacity: 0.8;
+	}
+
+	@keyframes marquee {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+</style>

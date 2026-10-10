@@ -1,0 +1,753 @@
+---
+/**
+ * Feature bento: every card carries a small illustration built from the app's own UI patterns
+ * (progress bars, gold-edged rows, chips), so the section shows the product without screenshots.
+ * Illustrations are decorative; each card's heading and text carry the meaning.
+ */
+import { COPY } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locales';
+import CardBack from '../CardBack.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+const illo = copy.illo;
+const features = [...copy.features.items, ...copy.features.extras];
+
+const deckParts = [
+	{ label: 'Main', owned: 36, total: 40 },
+	{ label: 'Extra', owned: 13, total: 15 },
+	{ label: 'Side', owned: 8, total: 15 },
+];
+const deckOwned = deckParts.reduce((sum, part) => sum + part.owned, 0);
+const deckTotal = deckParts.reduce((sum, part) => sum + part.total, 0);
+const deckPercent = Math.round((deckOwned / deckTotal) * 100);
+const setPercent = 72;
+
+// A 21×21 QR-like pattern: three finder squares plus seeded noise. Decorative, encodes nothing.
+const QR = 21;
+let seed = 11;
+const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+const inFinder = (x: number, y: number) => (x < 8 && y < 8) || (x > QR - 9 && y < 8) || (x < 8 && y > QR - 9);
+const finderCell = (x: number, y: number) => {
+	const fx = x > QR - 9 ? x - (QR - 7) : x;
+	const fy = y > QR - 9 ? y - (QR - 7) : y;
+	if (fx < 0 || fy < 0 || fx > 6 || fy > 6) return false;
+	return fx === 0 || fy === 0 || fx === 6 || fy === 6 || (fx >= 2 && fx <= 4 && fy >= 2 && fy <= 4);
+};
+let qrPath = '';
+for (let y = 0; y < QR; y++) {
+	for (let x = 0; x < QR; x++) {
+		const dark = inFinder(x, y) ? finderCell(x, y) : rand() > 0.52;
+		if (dark) qrPath += `M${x} ${y}h1v1h-1z`;
+	}
+}
+---
+
+<section class="section features" id="features" aria-labelledby="features-title">
+	<div class="container">
+		<div class="section-head" data-reveal>
+			<p class="eyebrow">{copy.features.eyebrow}</p>
+			<h2 id="features-title">{copy.features.title}</h2>
+		</div>
+
+		<ul class="bento">
+			{features.map((item, index) => (
+				<li
+					class:list={['tile', `tile-${item.id}`]}
+					style={`grid-area:${item.id};--delay:${(index % 3) * 0.08}s`}
+					data-reveal
+					data-spotlight
+				>
+					<div class="illo" aria-hidden="true">
+						{item.id === 'decks' && (
+							<div class="i-deck">
+								<div class="i-deck-head">
+									<span class="i-deck-name">{copy.mock.decks[0].name}</span>
+									<span class="i-deck-pct">
+										{deckPercent}% <small>{illo.ready}</small>
+									</span>
+								</div>
+								{deckParts.map((part, i) => (
+									<div class="i-part">
+										<span class="i-part-label">{part.label}</span>
+										<span class="i-bar">
+											<span style={`width:${Math.round((part.owned / part.total) * 100)}%;--i:${i}`} />
+										</span>
+										<span class="i-part-count">
+											{part.owned}/{part.total}
+										</span>
+									</div>
+								))}
+							</div>
+						)}
+
+						{item.id === 'collections' && (
+							<div class="i-set">
+								<div class="i-ring" style={`--pct:${setPercent}`}>
+									<span>{setPercent}%</span>
+								</div>
+								<p class="i-set-name">{illo.setName}</p>
+								<p class="i-set-count">{illo.setCount}</p>
+								<div class="i-set-grid">
+									{Array.from({ length: 12 }, (_, i) => (
+										<span class:list={{ owned: i % 4 !== 3 }} />
+									))}
+								</div>
+							</div>
+						)}
+
+						{item.id === 'wishlist' && (
+							<ul class="i-rows">
+								{illo.wishlist.map((row) => (
+									<li>
+										<Icon name="heart-outline" size={14} />
+										<span class="i-row-name">{row.name}</span>
+										<span class="i-row-meta">
+											{row.qty}× · {row.price}
+										</span>
+									</li>
+								))}
+							</ul>
+						)}
+
+						{item.id === 'search' && (
+							<div class="i-search">
+								<div class="i-field">
+									<Icon name="search-outline" size={14} />
+									<span>{illo.searchQuery}</span>
+									<span class="caret" />
+								</div>
+								<div class="i-result">
+									<CardBack class="i-thumb" />
+									<div>
+										<p class="i-result-main">{illo.resultPrimary}</p>
+										<p class="i-result-alt">{illo.resultSecondary}</p>
+									</div>
+								</div>
+							</div>
+						)}
+
+						{item.id === 'shopping' && (
+							<div class="i-shop">
+								<svg class="i-qr" viewBox={`-1 -1 ${QR + 2} ${QR + 2}`} shape-rendering="crispEdges">
+									<rect x="-1" y="-1" width={QR + 2} height={QR + 2} fill="#f3ede1" />
+									<path d={qrPath} fill="#181307" />
+								</svg>
+								<div class="i-shop-side">
+									<span class="i-toast">
+										<Icon name="checkmark" size={14} />
+										{illo.copied}
+									</span>
+									<span class="i-line" />
+									<span class="i-line short" />
+									<span class="i-line" />
+								</div>
+							</div>
+						)}
+
+						{item.id === 'offline' && (
+							<div class="i-status">
+								<span class="pill off">
+									<Icon name="cloud-offline-outline" size={14} />
+									{illo.offline}
+								</span>
+								<span class="pill on">
+									<Icon name="checkmark" size={14} />
+									{illo.synced}
+								</span>
+							</div>
+						)}
+
+						{item.id === 'account' && (
+							<div class="i-devices">
+								<span class="device">{illo.oldPhone}</span>
+								<span class="flow">
+									<span />
+									<span />
+									<span />
+								</span>
+								<span class="device new">{illo.newPhone}</span>
+							</div>
+						)}
+					</div>
+
+					<div class="text">
+						<h3>
+							<Icon name={item.icon} size={20} />
+							{item.title}
+						</h3>
+						<p>{item.body}</p>
+					</div>
+				</li>
+			))}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.features {
+		background: radial-gradient(ellipse 50% 40% at 85% 10%, rgba(227, 184, 75, 0.07), transparent 70%), var(--color-sheet);
+	}
+
+	.bento {
+		display: grid;
+		gap: var(--space-3);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		grid-template-areas:
+			'decks'
+			'collections'
+			'wishlist'
+			'search'
+			'shopping'
+			'offline'
+			'account';
+	}
+
+	@media (min-width: 680px) {
+		.bento {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-areas:
+				'decks decks'
+				'collections wishlist'
+				'collections search'
+				'shopping shopping'
+				'offline account';
+		}
+	}
+
+	@media (min-width: 1000px) {
+		.bento {
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-areas:
+				'decks decks collections'
+				'wishlist search collections'
+				'shopping shopping offline'
+				'account account account';
+		}
+	}
+
+	/* Tile */
+	.tile {
+		position: relative;
+		display: grid;
+		/* The illustration absorbs any extra height, so tiles that span rows stay balanced. */
+		grid-template-rows: 1fr auto;
+		gap: var(--space-4);
+		overflow: hidden;
+		padding: var(--space-4);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-hero);
+		background: var(--color-card);
+		transition:
+			border-color 0.3s ease,
+			box-shadow 0.3s ease,
+			translate 0.3s ease;
+	}
+
+	/* Spotlight under the pointer (position set by the page script). */
+	.tile::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(227, 184, 75, 0.12), transparent 60%);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		pointer-events: none;
+	}
+
+	.tile:hover {
+		border-color: var(--border-highlight);
+		box-shadow: 0 0 30px rgba(227, 184, 75, 0.12);
+		translate: 0 -4px;
+	}
+
+	.tile:hover::before {
+		opacity: 1;
+	}
+
+	.text {
+		display: grid;
+		align-content: end;
+		gap: var(--space-2);
+	}
+
+	h3 {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		font-size: 1.1875rem;
+	}
+
+	h3 :global(.icon) {
+		flex: none;
+		color: var(--color-primary);
+	}
+
+	.text p {
+		color: var(--color-text-secondary);
+	}
+
+	.illo {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-height: 150px;
+		padding: var(--space-3);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-panel);
+		background: radial-gradient(circle at 50% 0%, rgba(227, 184, 75, 0.1), transparent 70%), var(--color-sheet);
+		font-size: 13px;
+	}
+
+	/* Account spans the full row on wide screens; lay it out sideways there. */
+	@media (min-width: 1000px) {
+		.tile-account {
+			grid-template-rows: none;
+			grid-template-columns: minmax(260px, 1fr) 1.4fr;
+			align-items: center;
+		}
+	}
+
+	/* Decks: progress per section */
+	.i-deck {
+		display: grid;
+		gap: 10px;
+		width: min(100%, 420px);
+	}
+
+	.i-deck-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: 4px;
+	}
+
+	.i-deck-name {
+		font-family: var(--font-display);
+		font-size: 1.125rem;
+	}
+
+	.i-deck-pct {
+		color: var(--color-primary);
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		font-weight: 700;
+	}
+
+	.i-deck-pct small {
+		color: var(--color-text-secondary);
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+		font-weight: 500;
+	}
+
+	.i-part {
+		display: grid;
+		grid-template-columns: 44px 1fr 44px;
+		gap: 10px;
+		align-items: center;
+		color: var(--color-text-secondary);
+		font-size: 12px;
+	}
+
+	.i-part-count {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.i-bar {
+		height: 6px;
+		overflow: hidden;
+		border-radius: 3px;
+		background: var(--progress-track);
+	}
+
+	.i-bar span {
+		display: block;
+		height: 100%;
+		border-radius: 3px;
+		background: var(--gradient-progress);
+		transform-origin: 0 50%;
+		transform: scaleX(0);
+		transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+		transition-delay: calc(0.3s + var(--i) * 0.15s);
+	}
+
+	.tile.is-in .i-bar span,
+	:global(html:not(.js)) .i-bar span {
+		transform: none;
+	}
+
+	/* Collections: completion ring. Registered so the conic fill can transition. */
+	@property --fill {
+		syntax: '<number>';
+		initial-value: 0;
+		inherits: false;
+	}
+
+	.i-set {
+		display: grid;
+		gap: 6px;
+		justify-items: center;
+		text-align: center;
+	}
+
+	.i-ring {
+		--fill: 0;
+		display: grid;
+		place-items: center;
+		width: 120px;
+		aspect-ratio: 1;
+		margin-bottom: 8px;
+		border-radius: 50%;
+		background:
+			radial-gradient(closest-side, var(--color-sheet) 78%, transparent 80%),
+			conic-gradient(var(--color-primary) calc(var(--fill) * 1%), var(--progress-track) 0);
+		transition: --fill 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s;
+	}
+
+	.tile.is-in .i-ring,
+	:global(html:not(.js)) .i-ring {
+		--fill: var(--pct);
+	}
+
+	.i-ring span {
+		color: var(--color-primary-muted);
+		font-family: var(--font-display);
+		font-size: 1.625rem;
+		font-weight: 700;
+	}
+
+	.i-set-name {
+		font-family: var(--font-display);
+		font-size: 1rem;
+	}
+
+	.i-set-count {
+		color: var(--color-text-secondary);
+		font-size: 12px;
+	}
+
+	.i-set-grid {
+		display: grid;
+		grid-template-columns: repeat(6, 22px);
+		gap: 6px;
+		margin-top: 10px;
+	}
+
+	.i-set-grid span {
+		aspect-ratio: 59 / 86;
+		border: 1px dashed var(--border-primary);
+		border-radius: 3px;
+	}
+
+	.i-set-grid span.owned {
+		border: 1px solid rgba(227, 184, 75, 0.5);
+		background: linear-gradient(160deg, #3a3021, #1e190d);
+	}
+
+	/* Wishlist */
+	.i-rows {
+		display: grid;
+		gap: 8px;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.i-rows li {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 2px 10px;
+		align-items: center;
+		padding: 10px 12px;
+		border-left: 3px solid var(--color-primary);
+		border-radius: var(--radius-card);
+		background: var(--color-element);
+	}
+
+	.i-rows :global(.icon) {
+		grid-row: span 2;
+		color: var(--color-primary);
+	}
+
+	.i-row-name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.i-row-meta {
+		color: var(--color-text-secondary);
+		font-size: 12px;
+	}
+
+	/* Search */
+	.i-search {
+		display: grid;
+		gap: 10px;
+		width: 100%;
+	}
+
+	.i-field {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		height: 38px;
+		padding: 0 12px;
+		border: 1px solid var(--border-primary);
+		border-radius: var(--radius-card);
+		background: var(--color-input);
+		color: var(--color-text-secondary);
+	}
+
+	.i-field span:not(.caret) {
+		color: var(--color-text);
+	}
+
+	.caret {
+		width: 1px;
+		height: 16px;
+		margin-left: -6px;
+		background: var(--color-primary);
+		animation: blink 1s steps(1) infinite;
+	}
+
+	@keyframes blink {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	.i-result {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 8px;
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-card);
+		background: var(--color-card);
+	}
+
+	.i-result :global(.i-thumb) {
+		flex: none;
+		width: 34px;
+		padding: 3px;
+		border-radius: 5px;
+	}
+
+	.i-result-main {
+		font-weight: 600;
+	}
+
+	.i-result-alt {
+		color: var(--color-primary);
+		font-size: 12px;
+	}
+
+	/* Shopping: QR + copied list */
+	.i-shop {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+	}
+
+	.i-qr {
+		width: 120px;
+		height: 120px;
+		border-radius: 10px;
+		box-shadow: 0 0 24px rgba(227, 184, 75, 0.2);
+	}
+
+	.i-shop-side {
+		display: grid;
+		gap: 10px;
+		width: 200px;
+	}
+
+	.i-toast {
+		display: inline-flex;
+		align-items: center;
+		justify-self: start;
+		gap: 6px;
+		margin-bottom: 4px;
+		padding: 6px 12px;
+		border: 1px solid var(--border-highlight);
+		border-radius: var(--radius-pill);
+		background: var(--color-element);
+		color: var(--color-primary-muted);
+		font-weight: 600;
+		animation: toast 4s ease-in-out infinite;
+	}
+
+	@keyframes toast {
+		0%,
+		12% {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+		20%,
+		80% {
+			opacity: 1;
+			transform: none;
+		}
+		92%,
+		100% {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+	}
+
+	.i-line {
+		height: 8px;
+		border-radius: 4px;
+		background: var(--color-element);
+	}
+
+	.i-line.short {
+		width: 60%;
+	}
+
+	/* Offline → synced */
+	.i-status {
+		display: grid;
+		place-items: center;
+	}
+
+	.pill {
+		display: inline-flex;
+		grid-area: 1 / 1;
+		align-items: center;
+		gap: 6px;
+		padding: 8px 16px;
+		border-radius: var(--radius-pill);
+		font-weight: 600;
+	}
+
+	.pill.off {
+		border: 1px solid rgba(243, 237, 225, 0.2);
+		background: var(--color-element);
+		color: var(--color-text-secondary);
+		animation: swap-out 5s ease-in-out infinite;
+	}
+
+	.pill.on {
+		border: 1px solid var(--border-highlight);
+		background: var(--color-primary-tint);
+		color: var(--color-primary-muted);
+		animation: swap-in 5s ease-in-out infinite;
+	}
+
+	@keyframes swap-out {
+		0%,
+		40% {
+			opacity: 1;
+			transform: none;
+		}
+		50%,
+		90% {
+			opacity: 0;
+			transform: translateY(-8px);
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes swap-in {
+		0%,
+		40% {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		50%,
+		90% {
+			opacity: 1;
+			transform: none;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+
+	/* Account: data moving to a new phone */
+	.i-devices {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+	}
+
+	.device {
+		display: grid;
+		place-items: end center;
+		width: 64px;
+		height: 110px;
+		padding-bottom: 10px;
+		border: 1px solid rgba(243, 237, 225, 0.25);
+		border-radius: 14px;
+		color: var(--color-text-secondary);
+		font-size: 10px;
+		text-align: center;
+	}
+
+	.device.new {
+		border-color: var(--border-highlight);
+		box-shadow: 0 0 20px rgba(227, 184, 75, 0.2);
+		color: var(--color-primary-muted);
+	}
+
+	.flow {
+		display: flex;
+		gap: 8px;
+	}
+
+	.flow span {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--color-primary);
+		animation: flow 1.4s ease-in-out infinite;
+	}
+
+	.flow span:nth-child(2) {
+		animation-delay: 0.2s;
+	}
+
+	.flow span:nth-child(3) {
+		animation-delay: 0.4s;
+	}
+
+	@keyframes flow {
+		0%,
+		100% {
+			opacity: 0.2;
+			transform: scale(0.8);
+		}
+		50% {
+			opacity: 1;
+			transform: scale(1.2);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.i-toast {
+			animation: none;
+		}
+
+		.pill.off {
+			display: none;
+		}
+
+		.pill.on {
+			opacity: 1;
+		}
+	}
+</style>

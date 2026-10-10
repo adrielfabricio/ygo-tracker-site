@@ -1,0 +1,161 @@
+---
+import { COPY } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locales';
+import Icon from '../Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const faq = COPY[locale].faq;
+---
+
+<section class="section faq" id="faq" aria-labelledby="faq-title">
+	<div class="container layout">
+		<div class="aside" data-reveal>
+			<div class="section-head">
+				<p class="eyebrow">{faq.eyebrow}</p>
+				<h2 id="faq-title">{faq.title}</h2>
+			</div>
+			<p class="more">
+				{faq.more}
+				<a href="/support" hreflang={locale === 'en' ? undefined : 'en'}>
+					{faq.moreLink}
+				</a>
+			</p>
+		</div>
+
+		<div class="list">
+			{faq.items.map((item, index) => (
+				<details data-reveal style={`--delay:${index * 0.05}s`}>
+					<summary>
+						<h3>{item.question}</h3>
+						<span class="toggle">
+							<Icon name="chevron-down" size={18} />
+						</span>
+					</summary>
+					<p>{item.answer}</p>
+				</details>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.layout {
+		display: grid;
+		gap: 32px;
+	}
+
+	@media (min-width: 960px) {
+		.layout {
+			grid-template-columns: 0.8fr 1.2fr;
+			gap: 64px;
+			align-items: start;
+		}
+
+		.aside {
+			position: sticky;
+			top: 104px;
+		}
+	}
+
+	.aside .section-head {
+		margin-bottom: var(--space-4);
+	}
+
+	.more {
+		display: grid;
+		gap: var(--space-1);
+		color: var(--color-text-secondary);
+	}
+
+	.list {
+		display: grid;
+		gap: var(--space-2h);
+	}
+
+	details {
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-panel);
+		background: var(--color-card);
+		transition:
+			border-color 0.3s ease,
+			background-color 0.3s ease;
+	}
+
+	details:hover {
+		border-color: var(--border-primary);
+	}
+
+	details[open] {
+		border-color: var(--border-highlight);
+		background: linear-gradient(160deg, #1e190d, var(--color-card) 60%);
+	}
+
+	/* Smooth open/close where the browser can animate to `auto` (falls back to an instant toggle). */
+	details::details-content {
+		block-size: 0;
+		overflow: hidden;
+		transition:
+			block-size 0.35s ease,
+			content-visibility 0.35s allow-discrete;
+	}
+
+	details[open]::details-content {
+		block-size: auto;
+	}
+
+	@supports (interpolate-size: allow-keywords) {
+		details {
+			interpolate-size: allow-keywords;
+		}
+	}
+
+	summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		min-height: 60px;
+		padding: var(--space-3) var(--space-4);
+		cursor: pointer;
+		list-style: none;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary h3 {
+		font-family: var(--font-body);
+		font-size: 1.0625rem;
+		font-weight: 600;
+		line-height: 1.4;
+	}
+
+	.toggle {
+		display: grid;
+		flex: none;
+		place-items: center;
+		width: 32px;
+		height: 32px;
+		border: 1px solid var(--border-primary);
+		border-radius: 50%;
+		color: var(--color-primary);
+		transition:
+			transform 0.3s ease,
+			background-color 0.3s ease;
+	}
+
+	details[open] .toggle {
+		background: var(--color-primary-tint);
+		transform: rotate(180deg);
+	}
+
+	details p {
+		padding: 0 var(--space-4) var(--space-4);
+		color: var(--color-text-secondary);
+	}
+</style>

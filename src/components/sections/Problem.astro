@@ -1,0 +1,399 @@
+---
+/**
+ * Before and after: where a missing-cards list usually lives (a screenshot, a spreadsheet, a note
+ * to self), and the same list in the app. The scraps are deliberately off-brand; the tidy card
+ * uses the app's own styling.
+ */
+import { Image } from 'astro:assets';
+
+import eyeGlyph from '../../assets/eye-glyph.png';
+import { COPY } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locales';
+import Icon from '../Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const problem = COPY[locale].problem;
+const { scattered, tidy } = problem;
+---
+
+<section class="section problem" aria-labelledby="problem-title">
+	<div class="container">
+		<div class="intro" data-reveal>
+			<p class="eyebrow">{problem.eyebrow}</p>
+			<h2 id="problem-title">{problem.title}</h2>
+			{problem.body.map((paragraph) => (
+				<p>{paragraph}</p>
+			))}
+		</div>
+
+		<figure class="scene" role="img" aria-label={problem.label}>
+			<div class="pile">
+				<div class="scrap photo" data-reveal style="--delay:0s">
+					<div class="shot">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<p class="file">{scattered.screenshot}</p>
+				</div>
+
+				<div class="scrap sheet" data-reveal style="--delay:0.12s">
+					<p class="sheet-name">{scattered.sheetName}</p>
+					<table>
+						<tbody>
+							<tr>
+								<th></th>
+								<th>A</th>
+								<th>B</th>
+							</tr>
+							{scattered.sheetRows.map(([name, note], index) => (
+								<tr>
+									<th>{index + 1}</th>
+									<td>{name}</td>
+									<td>{note}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+
+				<div class="scrap chat" data-reveal style="--delay:0.24s">
+					<p class="chat-from">{scattered.chatFrom}</p>
+					<p class="bubble">{scattered.chatText}</p>
+					<p class="chat-time">{scattered.chatTime}</p>
+				</div>
+			</div>
+
+			<div class="arrow" data-reveal style="--delay:0.4s">
+				<span class="beam"></span>
+				<Image src={eyeGlyph} alt="" width={96} height={96} class="arrow-eye" />
+				<span class="beam"></span>
+			</div>
+
+			<div class="tidy" data-reveal style="--delay:0.55s">
+				<p class="tidy-title">{tidy.title}</p>
+				<p class="tidy-sub">{tidy.subtitle}</p>
+				<ul>
+					{tidy.rows.map((row) => (
+						<li>
+							<span class="qty">{row.qty}×</span>
+							<span class="name">{row.name}</span>
+							<span class="price">{row.price}</span>
+						</li>
+					))}
+				</ul>
+				<p class="total">
+					<span>{tidy.totalLabel}</span>
+					<strong>{tidy.total}</strong>
+				</p>
+				<span class="copy-btn">
+					<Icon name="clipboard-outline" size={16} />
+					{tidy.copy}
+				</span>
+			</div>
+		</figure>
+	</div>
+</section>
+
+<style>
+	.intro {
+		display: grid;
+		gap: var(--space-3);
+		max-width: 760px;
+		margin: 0 auto 56px;
+		text-align: center;
+		justify-items: center;
+	}
+
+	.intro h2 {
+		margin-bottom: var(--space-2);
+		font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.5rem);
+	}
+
+	.intro p:not(.eyebrow) {
+		color: var(--color-text-secondary);
+		font-size: 1.125rem;
+	}
+
+	.scene {
+		display: grid;
+		gap: 24px;
+		align-items: center;
+		justify-items: center;
+		margin: 0;
+	}
+
+	@media (min-width: 900px) {
+		.scene {
+			grid-template-columns: 1fr auto 1fr;
+			gap: 32px;
+		}
+	}
+
+	/* The pile */
+	.pile {
+		position: relative;
+		width: min(100%, 380px);
+		height: 330px;
+	}
+
+	.scrap {
+		position: absolute;
+		box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+	}
+
+	.photo {
+		top: 0;
+		left: 4%;
+		width: 150px;
+		padding: 8px 8px 6px;
+		border-radius: 6px;
+		background: #e9e4d8;
+		rotate: -9deg;
+	}
+
+	.shot {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 5px;
+		padding: 10px 8px;
+		border-radius: 3px;
+		background: linear-gradient(160deg, #3a3a40, #1c1c20);
+	}
+
+	.shot span {
+		aspect-ratio: 59 / 86;
+		border-radius: 2px;
+		background: linear-gradient(160deg, #6a5a3a, #3a3226);
+	}
+
+	.file {
+		margin-top: 5px;
+		color: #55524c;
+		font:
+			600 10px/1.2 ui-monospace,
+			Menlo,
+			monospace;
+	}
+
+	.sheet {
+		top: 70px;
+		right: 0;
+		width: 220px;
+		overflow: hidden;
+		border: 1px solid #cfcabd;
+		border-radius: 6px;
+		background: #f6f3ec;
+		color: #2b2a27;
+		rotate: 6deg;
+	}
+
+	.sheet-name {
+		padding: 6px 10px;
+		border-bottom: 1px solid #cfcabd;
+		background: #e7e2d6;
+		font:
+			600 10px/1.2 ui-monospace,
+			Menlo,
+			monospace;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 11px;
+	}
+
+	th,
+	td {
+		padding: 5px 8px;
+		border: 1px solid #ddd8cc;
+		text-align: left;
+		white-space: nowrap;
+	}
+
+	th {
+		background: #ece8de;
+		color: #77736a;
+		font-weight: 600;
+	}
+
+	.chat {
+		bottom: 0;
+		left: 12%;
+		width: 230px;
+		padding: 10px 12px;
+		border-radius: 14px;
+		background: #26262a;
+		rotate: -4deg;
+	}
+
+	.chat-from {
+		color: #a9a7a2;
+		font-size: 10px;
+		font-weight: 600;
+	}
+
+	.bubble {
+		margin-top: 4px;
+		color: #ecebe8;
+		font-size: 13px;
+		line-height: 1.35;
+	}
+
+	.chat-time {
+		margin-top: 4px;
+		color: #7d7b77;
+		font-size: 10px;
+		text-align: right;
+	}
+
+	/* The transformation */
+	.arrow {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+	}
+
+	@media (min-width: 900px) {
+		.arrow {
+			flex-direction: row;
+		}
+	}
+
+	.beam {
+		width: 2px;
+		height: 28px;
+		background: linear-gradient(180deg, transparent, var(--color-primary));
+	}
+
+	.beam:last-child {
+		background: linear-gradient(180deg, var(--color-primary), transparent);
+	}
+
+	@media (min-width: 900px) {
+		.beam {
+			width: 40px;
+			height: 2px;
+			background: linear-gradient(90deg, transparent, var(--color-primary));
+		}
+
+		.beam:last-child {
+			background: linear-gradient(90deg, var(--color-primary), transparent);
+		}
+	}
+
+	.arrow :global(.arrow-eye) {
+		width: 48px;
+		height: 48px;
+		filter: drop-shadow(0 0 14px rgba(227, 184, 75, 0.6));
+		animation: pulse 3s ease-in-out infinite;
+	}
+
+	@keyframes pulse {
+		0%,
+		100% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.12);
+		}
+	}
+
+	/* The tidy list, in the app's own style */
+	.tidy {
+		width: min(100%, 380px);
+		padding: var(--space-4);
+		border: 1px solid var(--border-highlight);
+		border-radius: var(--radius-hero);
+		background: var(--color-card);
+		box-shadow:
+			0 0 40px rgba(227, 184, 75, 0.14),
+			0 20px 50px rgba(0, 0, 0, 0.45);
+	}
+
+	.tidy-title {
+		color: var(--color-primary);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+
+	.tidy-sub {
+		margin-top: 2px;
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+	}
+
+	.tidy ul {
+		display: grid;
+		gap: var(--space-2);
+		margin: var(--space-3) 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.tidy li {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: var(--space-2h);
+		align-items: center;
+		padding: 10px 12px;
+		border-left: 3px solid var(--color-primary);
+		border-radius: var(--radius-card);
+		background: var(--color-element);
+		font-size: 0.875rem;
+	}
+
+	.qty {
+		color: var(--color-primary);
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.price {
+		color: var(--color-text-secondary);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.total {
+		display: flex;
+		justify-content: space-between;
+		padding-top: var(--space-2h);
+		border-top: 1px solid var(--border-subtle);
+		color: var(--color-text-secondary);
+	}
+
+	.total strong {
+		color: var(--color-primary-muted);
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+	}
+
+	.copy-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-2);
+		height: 44px;
+		margin-top: var(--space-3);
+		border-radius: var(--radius-button);
+		background: var(--gradient-primary);
+		box-shadow: var(--glow-cta);
+		color: var(--color-on-primary);
+		font-size: 0.9375rem;
+		font-weight: 700;
+	}
+</style>

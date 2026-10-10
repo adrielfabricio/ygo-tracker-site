@@ -1,0 +1,157 @@
+---
+/** Three steps, numbered inside cartouches (the oval that framed royal names in hieroglyphs). */
+import { COPY } from '../../i18n/copy';
+import type { Locale } from '../../i18n/locales';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const steps = COPY[locale].steps;
+const numerals = ['I', 'II', 'III'];
+---
+
+<section class="section steps" aria-labelledby="steps-title">
+	<div class="container">
+		<div class="section-head" data-reveal>
+			<p class="eyebrow">{steps.eyebrow}</p>
+			<h2 id="steps-title">{steps.title}</h2>
+		</div>
+
+		<div class="path" data-reveal>
+			<span class="line" aria-hidden="true"></span>
+			<ol>
+				{steps.items.map((step, index) => (
+					<li style={`--i:${index}`}>
+						<span class="cartouche" aria-hidden="true">
+							<span>{numerals[index]}</span>
+						</span>
+						<div>
+							<h3>{step.title}</h3>
+							<p>{step.body}</p>
+						</div>
+					</li>
+				))}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<style>
+	.path {
+		position: relative;
+	}
+
+	ol {
+		position: relative;
+		display: grid;
+		gap: 40px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		display: grid;
+		grid-template-columns: 64px 1fr;
+		gap: var(--space-4);
+		align-items: start;
+	}
+
+	@media (min-width: 860px) {
+		ol {
+			grid-template-columns: repeat(3, 1fr);
+			gap: var(--space-5);
+		}
+
+		li {
+			grid-template-columns: none;
+			justify-items: center;
+			text-align: center;
+		}
+	}
+
+	/* The connecting line: vertical on phones, horizontal on wide screens; drawn when revealed. */
+	.line {
+		position: absolute;
+		top: 40px;
+		bottom: 40px;
+		left: 31px;
+		width: 2px;
+		background: linear-gradient(180deg, var(--color-primary-dark), var(--color-primary-muted), var(--color-primary-dark));
+		transform-origin: 50% 0;
+		transform: scaleY(0);
+		transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s;
+	}
+
+	@media (min-width: 860px) {
+		.line {
+			top: 44px;
+			right: 16.6%;
+			bottom: auto;
+			left: 16.6%;
+			width: auto;
+			height: 2px;
+			background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary-muted), var(--color-primary-dark));
+			transform-origin: 0 50%;
+			transform: scaleX(0);
+		}
+	}
+
+	.path.is-in .line,
+	:global(html:not(.js)) .line {
+		transform: none;
+	}
+
+	.cartouche {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		place-items: center;
+		width: 64px;
+		height: 88px;
+		border: 2px solid var(--color-primary);
+		border-radius: 999px;
+		outline: 1px solid rgba(227, 184, 75, 0.35);
+		outline-offset: -8px;
+		background: var(--color-canvas);
+		box-shadow: 0 0 24px rgba(227, 184, 75, 0.2);
+		color: var(--color-primary-muted);
+		font-family: var(--font-display);
+		font-size: 1.375rem;
+		font-weight: 700;
+		transition: box-shadow 0.6s ease;
+		transition-delay: calc(0.4s + var(--i) * 0.25s);
+	}
+
+	/* The bar at the base of a cartouche. */
+	.cartouche::after {
+		content: '';
+		position: absolute;
+		bottom: -9px;
+		width: 44px;
+		height: 3px;
+		border-radius: 2px;
+		background: var(--color-primary);
+	}
+
+	.path.is-in .cartouche {
+		box-shadow: 0 0 34px rgba(227, 184, 75, 0.35);
+	}
+
+	h3 {
+		margin: 8px 0 6px;
+		font-size: 1.25rem;
+	}
+
+	@media (min-width: 860px) {
+		h3 {
+			margin-top: 20px;
+		}
+	}
+
+	li p {
+		color: var(--color-text-secondary);
+	}
+</style>

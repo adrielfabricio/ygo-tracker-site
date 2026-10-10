@@ -1,0 +1,173 @@
+---
+import { Image } from 'astro:assets';
+
+import eyeGlyph from '../assets/eye-glyph.png';
+import { AUTHOR, SUPPORT_EMAIL } from '../config/site';
+import { COPY } from '../i18n/copy';
+import { LOCALE_META, type Locale } from '../i18n/locales';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+const home = LOCALE_META[locale].home;
+const year = new Date().getFullYear();
+// The legal pages are English only; tell the browser and crawlers when linking from Portuguese.
+const legalLang = locale === 'en' ? undefined : 'en';
+---
+
+<footer class="footer">
+	<div class="container">
+		<div class="top">
+			<a class="brand" href={home} aria-label={copy.a11y.home}>
+				<Image src={eyeGlyph} alt="" width={80} height={80} class="mark" />
+				<span>YGO Tracker</span>
+			</a>
+
+			<nav class="links" aria-label={copy.a11y.footerNav}>
+				<div>
+					<p class="heading">{copy.footer.product}</p>
+					<ul>
+						<li>
+							<a href={`${home}#features`}>{copy.nav.features}</a>
+						</li>
+						<li>
+							<a href={`${home}#pricing`}>{copy.nav.plans}</a>
+						</li>
+						<li>
+							<a href={`${home}#faq`}>{copy.nav.faq}</a>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<p class="heading">{copy.footer.legal}</p>
+					<ul>
+						<li>
+							<a href="/privacy" hreflang={legalLang}>
+								{copy.footer.privacy}
+							</a>
+						</li>
+						<li>
+							<a href="/terms" hreflang={legalLang}>
+								{copy.footer.terms}
+							</a>
+						</li>
+						<li>
+							<a href="/support" hreflang={legalLang}>
+								{copy.footer.support}
+							</a>
+						</li>
+					</ul>
+					{copy.footer.englishOnly && <p class="note">{copy.footer.englishOnly}</p>}
+				</div>
+				<div>
+					<p class="heading">{copy.footer.contact}</p>
+					<ul>
+						<li>
+							<a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+
+		<p class="disclaimer">{copy.footer.disclaimer}</p>
+		<p class="rights">
+			© {year} {AUTHOR}. {copy.footer.rights}
+		</p>
+	</div>
+</footer>
+
+<style>
+	.footer {
+		padding-block: 56px 40px;
+		border-top: 1px solid var(--border-subtle);
+		background: var(--color-sheet);
+		font-size: 0.9375rem;
+	}
+
+	.top {
+		display: grid;
+		gap: 40px;
+	}
+
+	@media (min-width: 768px) {
+		.top {
+			grid-template-columns: 1fr 2fr;
+		}
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2h);
+		align-self: start;
+		color: var(--color-text);
+		font-family: var(--font-display);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-decoration: none;
+		text-transform: uppercase;
+	}
+
+	.mark {
+		width: 40px;
+		height: 40px;
+	}
+
+	.links {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+		gap: 32px;
+	}
+
+	.heading {
+		margin-bottom: var(--space-2h);
+		color: var(--color-primary);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+
+	ul {
+		display: grid;
+		gap: var(--space-2);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.links a {
+		display: inline-block;
+		padding-block: 4px;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		overflow-wrap: anywhere;
+	}
+
+	.links a:hover {
+		color: var(--color-text);
+	}
+
+	.note {
+		margin-top: var(--space-2);
+		color: var(--color-text-secondary);
+		font-size: 0.8125rem;
+	}
+
+	.disclaimer {
+		max-width: 760px;
+		margin-top: 48px;
+		color: var(--color-text-secondary);
+		font-size: 0.8125rem;
+	}
+
+	.rights {
+		margin-top: var(--space-3);
+		color: var(--color-text-secondary);
+		font-size: 0.8125rem;
+	}
+</style>

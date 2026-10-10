@@ -1,0 +1,128 @@
+---
+import { Font } from 'astro:assets';
+
+import { APP_NAME, APP_STORE_ID } from '../config/site';
+import { COPY } from '../i18n/copy';
+import { LOCALES, LOCALE_META, type Locale } from '../i18n/locales';
+import '../styles/global.css';
+
+interface Props {
+	locale: Locale;
+	title: string;
+	description: string;
+	/** Adds hreflang alternates for every locale. Only the landing page exists in more than one language. */
+	alternates?: boolean;
+	noindex?: boolean;
+	jsonLd?: Record<string, unknown>[];
+}
+
+const { locale, title, description, alternates = false, noindex = false, jsonLd = [] } = Astro.props;
+const meta = LOCALE_META[locale];
+const copy = COPY[locale];
+const site = Astro.site!;
+
+// `build.format: 'file'` makes the build-time pathname end in `.html`; Pages serves the clean URL.
+const cleanPath = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/(.)\/$/, '$1') || '/';
+const canonical = new URL(cleanPath, site).href;
+const ogImage = new URL(`/og/og-${locale}.png`, site).href;
+const alternateLinks = alternates
+	? [
+			...LOCALES.map((l) => ({ hreflang: LOCALE_META[l].htmlLang, href: new URL(LOCALE_META[l].home, site).href })),
+			{ hreflang: 'x-default', href: new URL('/', site).href },
+		]
+	: [];
+---
+
+<!doctype html>
+<html lang={meta.htmlLang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		{!noindex && <link rel="canonical" href={canonical} />}
+		{alternateLinks.map((link) => (
+			<link rel="alternate" hreflang={link.hreflang} href={link.href} />
+		))}
+		{noindex && <meta name="robots" content="noindex" />}
+
+		<!-- Marks the page before first paint so reveal-on-scroll never flashes content. -->
+		<script is:inline>
+			document.documentElement.classList.add('js');
+		</script>
+		<meta name="theme-color" content="#0D0B08" />
+		<meta name="color-scheme" content="dark" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<!-- iOS Safari shows a native "Open / Get" banner for the app. -->
+		<meta name="apple-itunes-app" content={`app-id=${APP_STORE_ID}`} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={APP_NAME} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={copy.meta.ogImageAlt} />
+		<meta property="og:locale" content={meta.ogLocale} />
+		{alternates &&
+			LOCALES.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={LOCALE_META[l].ogLocale} />)}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
+		<Font cssVariable="--font-cinzel" preload={[{ weight: '700' }, { weight: '600' }]} />
+
+		{jsonLd.map((data) => (
+			<script type="application/ld+json" is:inline set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />
+		))}
+	</head>
+	<body>
+		<a class="skip-link" href="#main">
+			{copy.a11y.skipToContent}
+		</a>
+		<div class="scroll-progress" aria-hidden="true"></div>
+		<slot />
+		<script is:inline>
+			(() => {
+				const items = document.querySelectorAll('[data-reveal]');
+				const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+				if (still || !('IntersectionObserver' in window)) {
+					items.forEach((el) => el.classList.add('is-in'));
+				} else {
+					const io = new IntersectionObserver(
+						(entries) => {
+							for (const entry of entries) {
+								if (!entry.isIntersecting) continue;
+								entry.target.classList.add('is-in');
+								io.unobserve(entry.target);
+							}
+						},
+						{ rootMargin: '0px 0px -8% 0px' },
+					);
+					items.forEach((el) => io.observe(el));
+				}
+
+				// Cards marked [data-spotlight] keep a soft gold light under the pointer.
+				document.addEventListener(
+					'pointermove',
+					(event) => {
+						const card = event.target instanceof Element && event.target.closest('[data-spotlight]');
+						if (!card) return;
+						const box = card.getBoundingClientRect();
+						card.style.setProperty('--mx', `${event.clientX - box.left}px`);
+						card.style.setProperty('--my', `${event.clientY - box.top}px`);
+					},
+					{ passive: true },
+				);
+			})();
+		</script>
+	</body>
+</html>
