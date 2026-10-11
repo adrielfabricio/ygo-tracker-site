@@ -15,7 +15,7 @@ export type Copy = {
 		storeLinks: string;
 		appStoreAlt: string;
 		playStoreAlt: string;
-		mockupLabel: string;
+		screenshotAlt: string;
 		included: string;
 		notIncluded: string;
 		mainNav: string;
@@ -26,26 +26,6 @@ export type Copy = {
 	trust: string[];
 	/** Keywords for the scrolling ribbon under the hero. */
 	ribbon: string[];
-	mock: {
-		welcomeEyebrow: string;
-		welcomeTitle: string;
-		collectionTotal: string;
-		owned: number;
-		total: number;
-		activeDecks: string;
-		activeDecksValue: number;
-		archived: string;
-		cardsMissing: string;
-		cardsMissingValue: number;
-		acrossAllDecks: string;
-		estimatedRemaining: string;
-		estimatedValue: string;
-		basedOn: string;
-		yourDecks: string;
-		newDeck: string;
-		cardsUnit: string;
-		decks: { name: string; owned: number; total: number }[];
-	};
 	problem: {
 		eyebrow: string;
 		title: string;
@@ -67,6 +47,7 @@ export type Copy = {
 	features: { eyebrow: string; title: string; items: Item[]; extras: Item[] };
 	/** Strings inside the small UI illustrations of the feature cards. */
 	illo: {
+		deckName: string;
 		ready: string;
 		setName: string;
 		setCount: string;
@@ -121,8 +102,8 @@ const ptBR: Copy = {
 		storeLinks: 'Baixar o app',
 		appStoreAlt: 'Baixar na App Store',
 		playStoreAlt: 'Disponível no Google Play',
-		mockupLabel:
-			'Tela inicial do YGO Tracker com a coleção total, os decks ativos, as cartas que faltam e a estimativa do que falta gastar.',
+		screenshotAlt:
+			'Tela inicial do YGO Tracker no iPhone: coleção total, decks ativos, cartas faltando, estimativa do que falta gastar e a lista de decks com o progresso de cada um.',
 		included: 'Incluído',
 		notIncluded: 'Não incluído',
 		mainNav: 'Seções da página',
@@ -146,30 +127,6 @@ const ptBR: Copy = {
 		'Lista de compras',
 		'Pagamento único',
 	],
-	mock: {
-		welcomeEyebrow: 'Bem-vindo de volta',
-		welcomeTitle: 'Duelista',
-		collectionTotal: 'Coleção total',
-		owned: 412,
-		total: 660,
-		activeDecks: 'Decks ativos',
-		activeDecksValue: 3,
-		archived: '1 arquivado',
-		cardsMissing: 'Cartas faltando',
-		cardsMissingValue: 27,
-		acrossAllDecks: 'em todos os decks',
-		estimatedRemaining: 'Estimativa restante',
-		estimatedValue: 'R$ 186,40',
-		basedOn: 'com base nos preços médios definidos',
-		yourDecks: 'Seus Decks',
-		newDeck: 'Novo deck',
-		cardsUnit: 'cartas',
-		decks: [
-			{ name: 'Blue-Eyes', owned: 38, total: 40 },
-			{ name: 'Dark Magician', owned: 29, total: 41 },
-			{ name: 'Branded Despia', owned: 31, total: 44 },
-		],
-	},
 	problem: {
 		eyebrow: 'O problema',
 		title: 'Sua lista de cartas está espalhada por aí',
@@ -254,6 +211,7 @@ const ptBR: Copy = {
 		],
 	},
 	illo: {
+		deckName: 'Blue-Eyes',
 		ready: 'pronto',
 		setName: 'Coleção do set',
 		setCount: '68 de 94 cartas',
@@ -398,7 +356,8 @@ const en: Copy = {
 		storeLinks: 'Download the app',
 		appStoreAlt: 'Download on the App Store',
 		playStoreAlt: 'Get it on Google Play',
-		mockupLabel: 'YGO Tracker home screen showing the total collection, active decks, missing cards and the estimated cost left.',
+		screenshotAlt:
+			"YGO Tracker home screen on iPhone: total collection, active decks, missing cards, estimated cost left and the deck list with each deck's progress.",
 		included: 'Included',
 		notIncluded: 'Not included',
 		mainNav: 'Page sections',
@@ -422,30 +381,6 @@ const en: Copy = {
 		'Shopping list',
 		'One-time payment',
 	],
-	mock: {
-		welcomeEyebrow: 'Welcome back',
-		welcomeTitle: 'Duelist',
-		collectionTotal: 'Total collection',
-		owned: 412,
-		total: 660,
-		activeDecks: 'Active decks',
-		activeDecksValue: 3,
-		archived: '1 archived',
-		cardsMissing: 'Cards missing',
-		cardsMissingValue: 27,
-		acrossAllDecks: 'across all decks',
-		estimatedRemaining: 'Estimated remaining',
-		estimatedValue: '$52.30',
-		basedOn: 'based on average prices set',
-		yourDecks: 'Your Decks',
-		newDeck: 'New deck',
-		cardsUnit: 'cards',
-		decks: [
-			{ name: 'Blue-Eyes', owned: 38, total: 40 },
-			{ name: 'Dark Magician', owned: 29, total: 41 },
-			{ name: 'Branded Despia', owned: 31, total: 44 },
-		],
-	},
 	problem: {
 		eyebrow: 'The problem',
 		title: 'Your missing-cards list is scattered everywhere',
@@ -530,6 +465,7 @@ const en: Copy = {
 		],
 	},
 	illo: {
+		deckName: 'Blue-Eyes',
 		ready: 'ready',
 		setName: 'Set collection',
 		setCount: '68 of 94 cards',

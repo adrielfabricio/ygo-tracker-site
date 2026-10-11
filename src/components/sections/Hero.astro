@@ -3,7 +3,8 @@ import { COPY } from '../../i18n/copy';
 import type { Locale } from '../../i18n/locales';
 import CardBack from '../CardBack.astro';
 import Icon from '../Icon.astro';
-import PhoneMockup from '../PhoneMockup.astro';
+import dashboardShot from '../../assets/screenshots/dashboard-pt-br.png';
+import PhoneShot from '../PhoneShot.astro';
 import StoreBadges from '../StoreBadges.astro';
 
 interface Props {
@@ -79,7 +80,7 @@ const embers = Array.from({ length: 16 }, () => ({
 			<CardBack class="fan fan-left" />
 			<CardBack class="fan fan-right" />
 			<div class="phone-float">
-				<PhoneMockup locale={locale} />
+				<PhoneShot src={dashboardShot} alt={copy.a11y.screenshotAlt} />
 			</div>
 		</div>
 	</div>
