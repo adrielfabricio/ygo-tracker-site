@@ -1,29 +1,35 @@
 ---
 /**
- * A real app screenshot inside a phone frame. The screenshot is the hero's largest image, so it
- * loads eagerly with high priority and ships as AVIF/WebP at the sizes the frame actually renders.
+ * A real app screenshot inside a phone frame, served as AVIF/WebP at the sizes the frame renders.
+ * Only the hero's screenshot is above the fold: it passes `eager` so it loads with high priority.
  */
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
 	src: ImageMetadata;
+	/** Empty when a surrounding element already describes the scene. */
 	alt: string;
+	/** Rendered width of the frame in CSS pixels. */
+	width?: number;
+	eager?: boolean;
+	class?: string;
 }
 
-const { src, alt } = Astro.props;
+const { src, alt, width = 300, eager = false, class: className } = Astro.props;
+const screenWidth = width - 20;
 ---
 
-<figure class="phone">
-	<div class="screen">
+<figure class:list={['phone', className]} style={`--phone-width:${width}px`}>
+	<div class="screen" style={`aspect-ratio:${src.width} / ${src.height}`}>
 		<Picture
 			src={src}
 			alt={alt}
 			formats={['avif', 'webp']}
-			widths={[300, 600, 900]}
-			sizes="300px"
-			loading="eager"
-			fetchpriority="high"
+			widths={[screenWidth, screenWidth * 2, screenWidth * 3]}
+			sizes={`${screenWidth}px`}
+			loading={eager ? 'eager' : 'lazy'}
+			fetchpriority={eager ? 'high' : 'auto'}
 			class="shot"
 		/>
 		<span class="island" aria-hidden="true"></span>
@@ -33,10 +39,11 @@ const { src, alt } = Astro.props;
 <style>
 	.phone {
 		position: relative;
-		width: 300px;
+		width: var(--phone-width);
+		max-width: 100%;
 		margin: 0;
 		padding: 10px;
-		border-radius: 48px;
+		border-radius: calc(var(--phone-width) * 0.16);
 		background: linear-gradient(160deg, #2a2318, #0d0b08 40%, #1e190d);
 		box-shadow:
 			0 0 0 1px rgba(227, 184, 75, 0.25),
@@ -47,10 +54,8 @@ const { src, alt } = Astro.props;
 	.screen {
 		position: relative;
 		overflow: hidden;
-		border-radius: 38px;
+		border-radius: calc(var(--phone-width) * 0.127);
 		background: var(--color-canvas);
-		/* iPhone screenshots are 1170×2532; reserve the space so nothing shifts while it loads. */
-		aspect-ratio: 1170 / 2532;
 	}
 
 	.screen :global(.shot) {
@@ -63,11 +68,11 @@ const { src, alt } = Astro.props;
 	/* The screenshot leaves the top centre empty where the camera sits on the device. */
 	.island {
 		position: absolute;
-		top: 9px;
+		top: 1.5%;
 		left: 50%;
 		width: 30%;
-		height: 22px;
-		border-radius: 12px;
+		height: 3.6%;
+		border-radius: 999px;
 		background: #000;
 		translate: -50% 0;
 	}

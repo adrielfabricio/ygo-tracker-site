@@ -1,15 +1,16 @@
 ---
 /**
  * Before and after: where a missing-cards list usually lives (a screenshot, a spreadsheet, a note
- * to self), and the same list in the app. The scraps are deliberately off-brand; the tidy card
- * uses the app's own styling.
+ * to self), and a real deck screen from the app. The scraps are deliberately off-brand. The whole
+ * scene is one image for assistive tech, described by `problem.label`.
  */
 import { Image } from 'astro:assets';
 
 import eyeGlyph from '../../assets/eye-glyph.png';
 import { COPY } from '../../i18n/copy';
 import type { Locale } from '../../i18n/locales';
-import Icon from '../Icon.astro';
+import deckDetail from '../../assets/screenshots/store/deck-detail.jpg';
+import PhoneShot from '../PhoneShot.astro';
 
 interface Props {
 	locale: Locale;
@@ -17,7 +18,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const problem = COPY[locale].problem;
-const { scattered, tidy } = problem;
+const { scattered } = problem;
 ---
 
 <section class="section problem" aria-labelledby="problem-title">
@@ -74,26 +75,8 @@ const { scattered, tidy } = problem;
 				<span class="beam"></span>
 			</div>
 
-			<div class="tidy" data-reveal style="--delay:0.55s">
-				<p class="tidy-title">{tidy.title}</p>
-				<p class="tidy-sub">{tidy.subtitle}</p>
-				<ul>
-					{tidy.rows.map((row) => (
-						<li>
-							<span class="qty">{row.qty}×</span>
-							<span class="name">{row.name}</span>
-							<span class="price">{row.price}</span>
-						</li>
-					))}
-				</ul>
-				<p class="total">
-					<span>{tidy.totalLabel}</span>
-					<strong>{tidy.total}</strong>
-				</p>
-				<span class="copy-btn">
-					<Icon name="clipboard-outline" size={16} />
-					{tidy.copy}
-				</span>
+			<div class="after" data-reveal style="--delay:0.55s">
+				<PhoneShot src={deckDetail} alt="" width={260} />
 			</div>
 		</figure>
 	</div>
@@ -305,95 +288,9 @@ const { scattered, tidy } = problem;
 		}
 	}
 
-	/* The tidy list, in the app's own style */
-	.tidy {
-		width: min(100%, 380px);
-		padding: var(--space-4);
-		border: 1px solid var(--border-highlight);
-		border-radius: var(--radius-hero);
-		background: var(--color-card);
-		box-shadow:
-			0 0 40px rgba(227, 184, 75, 0.14),
-			0 20px 50px rgba(0, 0, 0, 0.45);
-	}
-
-	.tidy-title {
-		color: var(--color-primary);
-		font-size: 0.75rem;
-		font-weight: 600;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-	}
-
-	.tidy-sub {
-		margin-top: 2px;
-		font-family: var(--font-display);
-		font-size: 1.25rem;
-	}
-
-	.tidy ul {
+	/* The "after": a real deck screen from the app. */
+	.after {
 		display: grid;
-		gap: var(--space-2);
-		margin: var(--space-3) 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.tidy li {
-		display: grid;
-		grid-template-columns: auto 1fr auto;
-		gap: var(--space-2h);
-		align-items: center;
-		padding: 10px 12px;
-		border-left: 3px solid var(--color-primary);
-		border-radius: var(--radius-card);
-		background: var(--color-element);
-		font-size: 0.875rem;
-	}
-
-	.qty {
-		color: var(--color-primary);
-		font-weight: 700;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.name {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.price {
-		color: var(--color-text-secondary);
-		font-variant-numeric: tabular-nums;
-	}
-
-	.total {
-		display: flex;
-		justify-content: space-between;
-		padding-top: var(--space-2h);
-		border-top: 1px solid var(--border-subtle);
-		color: var(--color-text-secondary);
-	}
-
-	.total strong {
-		color: var(--color-primary-muted);
-		font-family: var(--font-display);
-		font-size: 1.25rem;
-	}
-
-	.copy-btn {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-2);
-		height: 44px;
-		margin-top: var(--space-3);
-		border-radius: var(--radius-button);
-		background: var(--gradient-primary);
-		box-shadow: var(--glow-cta);
-		color: var(--color-on-primary);
-		font-size: 0.9375rem;
-		font-weight: 700;
+		justify-items: center;
 	}
 </style>
