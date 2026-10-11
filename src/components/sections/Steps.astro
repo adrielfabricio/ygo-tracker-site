@@ -1,5 +1,6 @@
 ---
 /** Three steps, numbered inside cartouches (the oval that framed royal names in hieroglyphs). */
+import { GUIDE_PATHS } from '../../config/translations.mjs';
 import { COPY } from '../../i18n/copy';
 import type { Locale } from '../../i18n/locales';
 
@@ -35,10 +36,19 @@ const numerals = ['I', 'II', 'III'];
 				))}
 			</ol>
 		</div>
+		<p class="guide-cta" data-reveal>
+			{steps.guideCta} <a href={GUIDE_PATHS[locale]}>{steps.guideLink}</a>
+		</p>
 	</div>
 </section>
 
 <style>
+	.guide-cta {
+		margin-top: 48px;
+		color: var(--color-text-secondary);
+		text-align: center;
+	}
+
 	.path {
 		position: relative;
 	}

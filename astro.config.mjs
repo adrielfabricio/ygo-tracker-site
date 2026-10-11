@@ -2,14 +2,13 @@
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
+import { translationsOf } from './src/config/translations.mjs';
+
 /**
- * Production origin. Canonical URLs, hreflang, Open Graph and the sitemap all derive from it,
- * so change it here (and in public/robots.txt) when the domain is final.
+ * Production origin. Canonical URLs, hreflang, Open Graph, robots.txt and the sitemap all derive
+ * from it; wrangler.jsonc and ops/legal-redirect/ repeat the domain.
  */
 const SITE = 'https://ygotracker.app';
-
-/** The only pages that exist in both languages; every other page is English-only legal text. */
-const LANDING_URLS = new Set([`${SITE}/`, `${SITE}/en`]);
 
 export default defineConfig({
 	site: SITE,
@@ -37,16 +36,16 @@ export default defineConfig({
 	integrations: [
 		sitemap({
 			filter: (page) => !page.endsWith('/download') && !page.endsWith('/404'),
-			i18n: {
-				defaultLocale: 'pt-br',
-				locales: { 'pt-br': 'pt-BR', en: 'en' },
-			},
+			// Same pairs as the hreflang tags in Base.astro; pages without a translation get no alternates.
 			serialize(item) {
-				if (LANDING_URLS.has(item.url)) {
-					item.links = [...(item.links ?? []), { url: `${SITE}/`, lang: 'x-default' }];
-				} else {
-					// The i18n option tags every unprefixed URL as pt-BR; the legal pages are English only.
-					delete item.links;
+				const path = new URL(item.url).pathname.replace(/(.)\/$/, '$1');
+				const translations = translationsOf(path);
+				if (translations) {
+					item.links = [
+						{ url: `${SITE}${translations['pt-br']}`, lang: 'pt-BR' },
+						{ url: `${SITE}${translations.en}`, lang: 'en' },
+						{ url: `${SITE}${translations['pt-br']}`, lang: 'x-default' },
+					];
 				}
 				return item;
 			},

@@ -8,6 +8,10 @@ export const SUPPORT_EMAIL = 'adrielfabricio.dev@gmail.com';
 export const APP_STORE_ID = '6800737945';
 /** `android.package` in ygo-tracker/app.config.js. */
 export const PLAY_PACKAGE = 'com.ygotracker';
+/** Plain store listing URLs (no campaign parameters), for structured data. */
+export const APP_STORE_URL = `https://apps.apple.com/app/id${APP_STORE_ID}`;
+export const PLAY_STORE_URL = `https://play.google.com/store/apps/details?id=${PLAY_PACKAGE}`;
+
 /** schema.org `applicationCategory`. Keep it in line with the primary category in the store listings. */
 export const APP_CATEGORY = 'EntertainmentApplication';
 
@@ -25,13 +29,13 @@ export const FREE_LIMITS = {
 } as const;
 
 /** Where on the site a store link sits, e.g. `hero` or `final`; reported as the campaign name. */
-export type Placement = 'hero' | 'final' | 'download';
+export type Placement = 'hero' | 'final' | 'download' | 'guide';
 
 const campaign = (locale: Locale, placement: Placement) => `site-${locale}-${placement}`;
 
 export function appStoreUrl(locale: Locale, placement: Placement): string {
 	// No storefront segment: Apple sends each visitor to the store of their own Apple ID.
-	const url = new URL(`https://apps.apple.com/app/id${APP_STORE_ID}`);
+	const url = new URL(APP_STORE_URL);
 	if (APPLE_PROVIDER_TOKEN) {
 		url.searchParams.set('pt', APPLE_PROVIDER_TOKEN);
 		url.searchParams.set('ct', campaign(locale, placement));
@@ -41,8 +45,7 @@ export function appStoreUrl(locale: Locale, placement: Placement): string {
 }
 
 export function playStoreUrl(locale: Locale, placement: Placement): string {
-	const url = new URL('https://play.google.com/store/apps/details');
-	url.searchParams.set('id', PLAY_PACKAGE);
+	const url = new URL(PLAY_STORE_URL);
 	url.searchParams.set('hl', locale === 'pt-br' ? 'pt_BR' : 'en');
 	// Install referrer, reported in Play Console → Acquisition.
 	url.searchParams.set('referrer', `utm_source=ygotracker-site&utm_medium=web&utm_campaign=${campaign(locale, placement)}`);

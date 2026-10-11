@@ -1,5 +1,6 @@
 ---
-import { APP_CATEGORY, APP_NAME, AUTHOR, appStoreUrl, playStoreUrl } from '../config/site';
+import dashboardShot from '../assets/screenshots/dashboard-pt-br.png';
+import { APP_CATEGORY, APP_NAME, APP_STORE_URL, AUTHOR, PLAY_STORE_URL } from '../config/site';
 import { COPY } from '../i18n/copy';
 import { LOCALES, LOCALE_META, type Locale } from '../i18n/locales';
 import Base from '../layouts/Base.astro';
@@ -34,7 +35,12 @@ const jsonLd = [
 		operatingSystem: 'iOS, Android',
 		applicationCategory: APP_CATEGORY,
 		inLanguage: LOCALES.map((l) => LOCALE_META[l].htmlLang),
-		installUrl: [appStoreUrl(locale, 'hero'), playStoreUrl(locale, 'hero')],
+		installUrl: [APP_STORE_URL, PLAY_STORE_URL],
+		downloadUrl: [APP_STORE_URL, PLAY_STORE_URL],
+		sameAs: [APP_STORE_URL, PLAY_STORE_URL],
+		screenshot: new URL(dashboardShot.src, site).href,
+		softwareRequirements: locale === 'pt-br' ? 'iOS 16.4 ou posterior, ou Android' : 'iOS 16.4 or later, or Android',
+		publisher: { '@type': 'Person', name: AUTHOR },
 		offers: { '@type': 'Offer', price: '0', priceCurrency: locale === 'pt-br' ? 'BRL' : 'USD' },
 		author: { '@type': 'Person', name: AUTHOR },
 	},
@@ -57,7 +63,7 @@ const jsonLd = [
 ];
 ---
 
-<Base locale={locale} title={copy.meta.title} description={copy.meta.description} alternates jsonLd={jsonLd}>
+<Base locale={locale} title={copy.meta.title} description={copy.meta.description} jsonLd={jsonLd}>
 	<Header locale={locale} sections />
 	<main id="main">
 		<Hero locale={locale} />

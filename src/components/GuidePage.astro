@@ -1,0 +1,127 @@
+---
+/**
+ * A long-form guide from the `guides` collection, with Article and BreadcrumbList structured data
+ * and a download call to action at the end.
+ */
+import { getEntry, render } from 'astro:content';
+
+import { APP_NAME, AUTHOR } from '../config/site';
+import { COPY } from '../i18n/copy';
+import { LOCALE_META } from '../i18n/locales';
+import Base from '../layouts/Base.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import StoreBadges from './StoreBadges.astro';
+
+interface Props {
+	id: 'pt-br/como-organizar-colecao-yugioh' | 'en/how-to-organize-yugioh-collection';
+}
+
+const entry = await getEntry('guides', Astro.props.id);
+if (!entry) throw new Error(`Missing guide: ${Astro.props.id}`);
+const { Content } = await render(entry);
+const { title, seoTitle, description, locale, published, updated } = entry.data;
+const copy = COPY[locale];
+const site = Astro.site!;
+const pageUrl = new URL(Astro.url.pathname.replace(/\.html$/, ''), site).href;
+const homeUrl = new URL(LOCALE_META[locale].home, site).href;
+const dateLocale = locale === 'pt-br' ? 'pt-BR' : 'en-US';
+const shownDate = (updated ?? published).toLocaleDateString(dateLocale, {
+	day: 'numeric',
+	month: 'long',
+	year: 'numeric',
+	timeZone: 'UTC',
+});
+
+const jsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: title,
+		description,
+		inLanguage: LOCALE_META[locale].htmlLang,
+		datePublished: published.toISOString().slice(0, 10),
+		dateModified: (updated ?? published).toISOString().slice(0, 10),
+		author: { '@type': 'Person', name: AUTHOR },
+		publisher: { '@type': 'Organization', name: APP_NAME, logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', site).href } },
+		image: new URL(`/og/og-${locale}.png`, site).href,
+		mainEntityOfPage: pageUrl,
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: APP_NAME, item: homeUrl },
+			{ '@type': 'ListItem', position: 2, name: copy.nav.guide, item: pageUrl },
+		],
+	},
+];
+---
+
+<Base locale={locale} title={seoTitle} description={description} jsonLd={jsonLd}>
+	<Header locale={locale} />
+	<main id="main" class="container prose guide">
+		<nav class="crumbs" aria-label="Breadcrumb">
+			<a href={LOCALE_META[locale].home}>{APP_NAME}</a>
+			<span aria-hidden="true">/</span>
+			<span>{copy.nav.guide}</span>
+		</nav>
+		<article>
+			<h1>{title}</h1>
+			<p class="date">
+				<time datetime={(updated ?? published).toISOString().slice(0, 10)}>{shownDate}</time>
+			</p>
+			<Content />
+		</article>
+		<aside class="cta" aria-labelledby="guide-cta-title">
+			<h2 id="guide-cta-title">{copy.final.title}</h2>
+			<p>{copy.final.body}</p>
+			<StoreBadges locale={locale} placement="guide" class="cta-badges" />
+		</aside>
+	</main>
+	<Footer locale={locale} />
+</Base>
+
+<style>
+	.crumbs {
+		display: flex;
+		gap: var(--space-2);
+		margin-bottom: var(--space-4);
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+
+	.crumbs a {
+		color: var(--color-text-secondary);
+	}
+
+	.date {
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+
+	.cta {
+		display: grid;
+		gap: var(--space-3);
+		justify-items: center;
+		margin-top: 48px;
+		padding: 40px var(--space-4);
+		border: 1px solid var(--border-highlight);
+		border-radius: 24px;
+		background: var(--gradient-gold-wash), var(--color-card);
+		text-align: center;
+	}
+
+	.cta h2 {
+		margin: 0;
+		color: var(--color-text);
+	}
+
+	.cta p {
+		margin: 0;
+	}
+
+	.cta :global(.cta-badges) {
+		justify-content: center;
+	}
+</style>

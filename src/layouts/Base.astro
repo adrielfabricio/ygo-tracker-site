@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets';
 
 import { APP_NAME, APP_STORE_ID } from '../config/site';
+import { translationsOf } from '../config/translations.mjs';
 import { COPY } from '../i18n/copy';
 import { LOCALES, LOCALE_META, type Locale } from '../i18n/locales';
 import '../styles/global.css';
@@ -10,13 +11,11 @@ interface Props {
 	locale: Locale;
 	title: string;
 	description: string;
-	/** Adds hreflang alternates for every locale. Only the landing page exists in more than one language. */
-	alternates?: boolean;
 	noindex?: boolean;
 	jsonLd?: Record<string, unknown>[];
 }
 
-const { locale, title, description, alternates = false, noindex = false, jsonLd = [] } = Astro.props;
+const { locale, title, description, noindex = false, jsonLd = [] } = Astro.props;
 const meta = LOCALE_META[locale];
 const copy = COPY[locale];
 const site = Astro.site!;
@@ -25,10 +24,13 @@ const site = Astro.site!;
 const cleanPath = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/(.)\/$/, '$1') || '/';
 const canonical = new URL(cleanPath, site).href;
 const ogImage = new URL(`/og/og-${locale}.png`, site).href;
-const alternateLinks = alternates
+// hreflang only for pages that exist in both languages (src/config/translations.mjs).
+const translations = translationsOf(cleanPath);
+const alternates = !!translations;
+const alternateLinks = translations
 	? [
-			...LOCALES.map((l) => ({ hreflang: LOCALE_META[l].htmlLang, href: new URL(LOCALE_META[l].home, site).href })),
-			{ hreflang: 'x-default', href: new URL('/', site).href },
+			...LOCALES.map((l) => ({ hreflang: LOCALE_META[l].htmlLang, href: new URL(translations[l], site).href })),
+			{ hreflang: 'x-default', href: new URL(translations['pt-br'], site).href },
 		]
 	: [];
 ---
