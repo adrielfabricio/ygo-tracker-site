@@ -82,7 +82,7 @@ const L = FREE_LIMITS;
 
 const ptBR: Copy = {
 	meta: {
-		title: 'App para organizar sua coleção de Yu-Gi-Oh! | YGO Tracker',
+		title: 'YGO Tracker',
 		description:
 			'Organize sua coleção de Yu-Gi-Oh! em português: veja o que falta em cada deck, quanto custa fechar e monte a lista de compras. Grátis no iPhone e Android.',
 		ogImageAlt: 'YGO Tracker: organize sua coleção de Yu-Gi-Oh!',
@@ -329,7 +329,7 @@ const ptBR: Copy = {
 
 const en: Copy = {
 	meta: {
-		title: 'Yu-Gi-Oh! Collection & Deck Tracker App | YGO Tracker',
+		title: 'YGO Tracker',
 		description:
 			'Track your physical Yu-Gi-Oh! cards, see which cards each deck is missing and what it costs to finish, and build a shopping list. Free on iPhone and Android.',
 		ogImageAlt: 'YGO Tracker: organize your Yu-Gi-Oh! collection',
