@@ -5,7 +5,7 @@ description: 'How YGO Tracker handles your data: what the app collects, what it 
 
 # Privacy Policy — YGO Tracker
 
-**Last updated**: 2026-10-09
+**Last updated**: 2026-10-12
 
 ## Who we are
 
@@ -44,6 +44,14 @@ transmitted.
 Account and collection data is stored in Google Cloud Firestore. Access is restricted so that
 only your signed-in account can read or write your own records. Diagnostics are processed by
 Sentry. Card artwork is served from Cloudflare R2 and involves no personal data.
+
+When you ask to reset your password, your email address goes through a Cloudflare Worker to
+Brevo, which delivers the reset message from no-reply@ygotracker.app. The address is used only
+to send that message.
+
+Purchases are verified with RevenueCat, which receives your account identifier and the receipt
+from Apple or Google so it can confirm the unlock. It does not receive your email or payment
+details.
 
 ## This website
 

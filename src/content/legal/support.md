@@ -5,7 +5,7 @@ description: 'Get help with YGO Tracker: contact, restoring Lifetime Access, off
 
 # Support — YGO Tracker
 
-**Last updated**: 2026-08-17
+**Last updated**: 2026-10-12
 
 ## Get in touch
 
@@ -23,6 +23,12 @@ bought it with, so sign in with the same Apple ID or Google account.
 
 If it still does not come back, email me with the purchase date and the email on your app
 account.
+
+### I did not get the password reset email
+
+The message comes from **no-reply@ygotracker.app** and usually arrives within a minute. Check
+your spam and promotions folders, and make sure you typed the email you signed up with. If it
+still does not show up, write to the address above.
 
 ### I got a new phone. Do I lose my decks?
 
