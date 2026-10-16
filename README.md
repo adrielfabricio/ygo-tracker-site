@@ -9,6 +9,7 @@ Marketing site for [YGO Tracker](https://github.com/adrielfabricio/ygo-tracker),
 | `/privacy`                  | Privacy policy (English)                                                         |
 | `/terms`                    | Terms of use (English)                                                           |
 | `/support`                  | Support and FAQ (English)                                                        |
+| `/guia`, `/en/guide`        | Guides index; each guide at `/guia/<slug>` and `/en/guide/<slug>`                |
 | `/download`, `/en/download` | Short link: sends phones to their store, shows both badges elsewhere (`noindex`) |
 
 ## Commands
@@ -23,23 +24,25 @@ npm run preview        # serve dist/
 npm run check          # astro check (types + .astro diagnostics)
 npm run format:write   # prettier
 npm run og:render      # regenerate public/og/*.png with headless Chrome (commit the result)
+npm run seo:indexnow   # after build + deploy: ask IndexNow engines (Bing…) to recrawl the sitemap
 ```
 
 To test Cloudflare routing, `_headers` and redirects locally: `npm run build && npx wrangler dev`.
 
 ## Where things live
 
-| Thing                                       | Path                       |
-| ------------------------------------------- | -------------------------- |
-| Production origin (`site`), i18n, sitemap   | `astro.config.mjs`         |
-| Store IDs, campaign links, free-tier limits | `src/config/site.ts`       |
-| All landing copy, both languages            | `src/i18n/copy.ts`         |
-| Landing sections (hero, bento, plans…)      | `src/components/sections/` |
-| Design tokens (mirror the app theme)        | `src/styles/tokens.css`    |
-| Legal documents (source of truth)           | `src/content/legal/*.md`   |
-| Official store badges                       | `public/badges/`           |
-| Ionicons subset (MIT)                       | `src/icons/`               |
-| Redirect bundle for the old legal site      | `ops/legal-redirect/`      |
+| Thing                                       | Path                                                 |
+| ------------------------------------------- | ---------------------------------------------------- |
+| Production origin (`site`), i18n, sitemap   | `astro.config.mjs`                                   |
+| Store IDs, campaign links, free-tier limits | `src/config/site.ts`                                 |
+| All landing copy, both languages            | `src/i18n/copy.ts`                                   |
+| Landing sections (hero, bento, plans…)      | `src/components/sections/`                           |
+| Design tokens (mirror the app theme)        | `src/styles/tokens.css`                              |
+| Legal documents (source of truth)           | `src/content/legal/*.md`                             |
+| Guides (one file per locale) + slug pairs   | `src/content/guides/`, `src/config/translations.mjs` |
+| Official store badges                       | `public/badges/`                                     |
+| Ionicons subset (MIT)                       | `src/icons/`                                         |
+| Redirect bundle for the old legal site      | `ops/legal-redirect/`                                |
 
 ## Keeping in sync with the app
 
@@ -53,7 +56,7 @@ To test Cloudflare routing, `_headers` and redirects locally: `npm run build && 
 The site is a static-assets Worker (no script) configured in `wrangler.jsonc`: Cloudflare serves `dist/`, applies `public/_headers` and `public/_redirects`, and answers on the custom domain `ygotracker.app`. `workers_dev` and preview URLs are off, so no duplicate copy of the site is reachable.
 
 - **CI** (`.github/workflows/ci.yml`): format, `astro check` and build on every PR and on pushes to `develop` and `main`.
-- **Deploy** (`.github/workflows/deploy.yml`): pushes to `main` build and run `wrangler deploy`.
+- **Deploy** (`.github/workflows/deploy.yml`): pushes to `main` build, run `wrangler deploy`, then ping IndexNow (`npm run seo:indexnow`, never fails the job).
 - **Manual deploy:** `npm run deploy` (requires `npx wrangler login`).
 
 Cloudflare is folding Pages into Workers; new projects should not use `wrangler pages` commands.

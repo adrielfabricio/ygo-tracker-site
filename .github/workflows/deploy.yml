@@ -37,3 +37,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+      # Ask Bing and the other IndexNow engines to recrawl. Never fails the deploy.
+      - name: Ping IndexNow
+        run: npm run seo:indexnow
+        continue-on-error: true

@@ -14,6 +14,7 @@
 		"format:write": "prettier --write .",
 		"format:check": "prettier --check .",
 		"og:render": "node scripts/render-og.mjs",
+		"seo:indexnow": "node scripts/indexnow.mjs",
 		"deploy": "npm run build && wrangler deploy"
 	},
 	"dependencies": {
