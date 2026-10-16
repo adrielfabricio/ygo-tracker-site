@@ -1,0 +1,122 @@
+---
+/**
+ * Lists every guide in one language, newest first, with CollectionPage and BreadcrumbList
+ * structured data. Linked from the header and the footer.
+ */
+import { getCollection } from 'astro:content';
+
+import { APP_NAME } from '../config/site';
+import { GUIDES_INDEX_PATHS, guidePath } from '../config/translations.mjs';
+import { COPY } from '../i18n/copy';
+import { LOCALE_META, type Locale } from '../i18n/locales';
+import Base from '../layouts/Base.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = COPY[locale];
+const site = Astro.site!;
+const pageUrl = new URL(GUIDES_INDEX_PATHS[locale], site).href;
+
+const guides = (await getCollection('guides', (guide) => guide.data.locale === locale))
+	.sort((a, b) => b.data.published.getTime() - a.data.published.getTime())
+	.map((guide) => ({
+		title: guide.data.title,
+		description: guide.data.description,
+		href: guidePath(locale, guide.id.split('/')[1]),
+	}));
+
+const jsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'CollectionPage',
+		name: copy.guides.title,
+		description: copy.guides.description,
+		inLanguage: LOCALE_META[locale].htmlLang,
+		url: pageUrl,
+		hasPart: guides.map((guide) => ({ '@type': 'Article', headline: guide.title, url: new URL(guide.href, site).href })),
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: APP_NAME, item: new URL(LOCALE_META[locale].home, site).href },
+			{ '@type': 'ListItem', position: 2, name: copy.nav.guide, item: pageUrl },
+		],
+	},
+];
+---
+
+<Base locale={locale} title={copy.guides.seoTitle} description={copy.guides.description} jsonLd={jsonLd}>
+	<Header locale={locale} />
+	<main id="main" class="container prose guides">
+		<h1>{copy.guides.title}</h1>
+		<p class="lead">{copy.guides.lead}</p>
+		<ul class="list">
+			{guides.map((guide) => (
+				<li>
+					<a class="item" href={guide.href}>
+						<h2>{guide.title}</h2>
+						<p>{guide.description}</p>
+						<span class="read">{copy.guides.read}</span>
+					</a>
+				</li>
+			))}
+		</ul>
+	</main>
+	<Footer locale={locale} />
+</Base>
+
+<style>
+	.lead {
+		margin-bottom: var(--space-5);
+	}
+
+	.list {
+		display: grid;
+		gap: var(--space-3);
+		padding: 0;
+		list-style: none;
+	}
+
+	.list li {
+		margin: 0;
+	}
+
+	.item {
+		display: grid;
+		gap: var(--space-2);
+		padding: var(--space-4);
+		border: 1px solid var(--border-subtle);
+		border-radius: 16px;
+		background: var(--color-card);
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		transition: border-color 0.2s ease;
+	}
+
+	.item:hover,
+	.item:focus-visible {
+		border-color: var(--border-highlight);
+	}
+
+	.item h2 {
+		margin: 0;
+		font-size: 1.1875rem;
+	}
+
+	.item p {
+		margin: 0;
+		font-size: 0.9375rem;
+	}
+
+	.read {
+		color: var(--color-primary);
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+</style>

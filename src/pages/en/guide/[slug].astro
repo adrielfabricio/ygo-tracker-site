@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+
+import GuidePage from '../../../components/GuidePage.astro';
+
+export async function getStaticPaths() {
+	const guides = await getCollection('guides', (guide) => guide.data.locale === 'en');
+	return guides.map((guide) => ({ params: { slug: guide.id.split('/')[1] }, props: { id: guide.id } }));
+}
+
+const { id } = Astro.props;
+---
+
+<GuidePage id={id} />

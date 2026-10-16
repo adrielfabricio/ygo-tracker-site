@@ -1,11 +1,12 @@
 ---
 /**
- * A long-form guide from the `guides` collection, with Article and BreadcrumbList structured data
- * and a download call to action at the end.
+ * A long-form guide from the `guides` collection, with Article and BreadcrumbList structured data,
+ * a download call to action and links to the other guides in the same language.
  */
-import { getEntry, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 
 import { APP_NAME, AUTHOR } from '../config/site';
+import { GUIDES_INDEX_PATHS, guidePath } from '../config/translations.mjs';
 import { COPY } from '../i18n/copy';
 import { LOCALE_META } from '../i18n/locales';
 import Base from '../layouts/Base.astro';
@@ -14,7 +15,8 @@ import Header from './Header.astro';
 import StoreBadges from './StoreBadges.astro';
 
 interface Props {
-	id: 'pt-br/como-organizar-colecao-yugioh' | 'en/how-to-organize-yugioh-collection';
+	/** Collection id, `<locale>/<slug>`. */
+	id: string;
 }
 
 const entry = await getEntry('guides', Astro.props.id);
@@ -25,6 +27,10 @@ const copy = COPY[locale];
 const site = Astro.site!;
 const pageUrl = new URL(Astro.url.pathname.replace(/\.html$/, ''), site).href;
 const homeUrl = new URL(LOCALE_META[locale].home, site).href;
+const indexPath = GUIDES_INDEX_PATHS[locale];
+const others = (await getCollection('guides', (guide) => guide.data.locale === locale && guide.id !== entry.id))
+	.sort((a, b) => b.data.published.getTime() - a.data.published.getTime())
+	.map((guide) => ({ title: guide.data.title, href: guidePath(locale, guide.id.split('/')[1]) }));
 const dateLocale = locale === 'pt-br' ? 'pt-BR' : 'en-US';
 const shownDate = (updated ?? published).toLocaleDateString(dateLocale, {
 	day: 'numeric',
@@ -52,7 +58,8 @@ const jsonLd = [
 		'@type': 'BreadcrumbList',
 		itemListElement: [
 			{ '@type': 'ListItem', position: 1, name: APP_NAME, item: homeUrl },
-			{ '@type': 'ListItem', position: 2, name: copy.nav.guide, item: pageUrl },
+			{ '@type': 'ListItem', position: 2, name: copy.nav.guide, item: new URL(indexPath, site).href },
+			{ '@type': 'ListItem', position: 3, name: title, item: pageUrl },
 		],
 	},
 ];
@@ -64,7 +71,7 @@ const jsonLd = [
 		<nav class="crumbs" aria-label="Breadcrumb">
 			<a href={LOCALE_META[locale].home}>{APP_NAME}</a>
 			<span aria-hidden="true">/</span>
-			<span>{copy.nav.guide}</span>
+			<a href={indexPath}>{copy.nav.guide}</a>
 		</nav>
 		<article>
 			<h1>{title}</h1>
@@ -78,6 +85,18 @@ const jsonLd = [
 			<p>{copy.final.body}</p>
 			<StoreBadges locale={locale} placement="guide" class="cta-badges" />
 		</aside>
+		{others.length > 0 && (
+			<nav class="more" aria-labelledby="guide-more-title">
+				<h2 id="guide-more-title">{copy.guides.more}</h2>
+				<ul>
+					{others.map((guide) => (
+						<li>
+							<a href={guide.href}>{guide.title}</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+		)}
 	</main>
 	<Footer locale={locale} />
 </Base>
@@ -123,5 +142,13 @@ const jsonLd = [
 
 	.cta :global(.cta-badges) {
 		justify-content: center;
+	}
+
+	.more {
+		margin-top: 48px;
+	}
+
+	.more h2 {
+		margin-top: 0;
 	}
 </style>

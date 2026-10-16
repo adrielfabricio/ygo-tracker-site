@@ -76,13 +76,23 @@ export type Copy = {
 	};
 	download: { title: string; body: string; redirecting: string };
 	notFound: { title: string; body: string; back: string };
+	guides: {
+		/** `<title>` of the guides index (≤ 60 characters). */
+		seoTitle: string;
+		description: string;
+		title: string;
+		lead: string;
+		/** Heading of the "other guides" list at the end of each guide. */
+		more: string;
+		read: string;
+	};
 };
 
 const L = FREE_LIMITS;
 
 const ptBR: Copy = {
 	meta: {
-		title: 'YGO Tracker',
+		title: 'YGO Tracker: organize sua coleção de Yu-Gi-Oh!',
 		description:
 			'Organize sua coleção de Yu-Gi-Oh! em português: veja o que falta em cada deck, quanto custa fechar e monte a lista de compras. Grátis no iPhone e Android.',
 		ogImageAlt: 'YGO Tracker: organize sua coleção de Yu-Gi-Oh!',
@@ -100,7 +110,7 @@ const ptBR: Copy = {
 		mainNav: 'Seções da página',
 		footerNav: 'Links do rodapé',
 	},
-	nav: { features: 'Recursos', plans: 'Planos', faq: 'Dúvidas', guide: 'Guia', download: 'Baixar' },
+	nav: { features: 'Recursos', plans: 'Planos', faq: 'Dúvidas', guide: 'Guias', download: 'Baixar' },
 	hero: {
 		eyebrow: 'Para quem coleciona cartas físicas',
 		title: 'Saiba o que falta para fechar cada deck de Yu-Gi-Oh!',
@@ -325,11 +335,20 @@ const ptBR: Copy = {
 		body: 'Essa carta não está no deck. O endereço pode ter mudado ou nunca ter existido.',
 		back: 'Voltar para o início',
 	},
+	guides: {
+		seoTitle: 'Guias de Yu-Gi-Oh! para colecionadores | YGO Tracker',
+		description:
+			'Guias práticos para quem coleciona cartas físicas de Yu-Gi-Oh!: organizar a coleção, montar a planilha, calcular o custo de um deck e achar a carta pelo nome em português ou inglês.',
+		title: 'Guias para colecionadores de Yu-Gi-Oh!',
+		lead: 'Passo a passo para organizar suas cartas físicas, saber o que falta em cada deck e gastar só com o que precisa.',
+		more: 'Outros guias',
+		read: 'Ler o guia',
+	},
 };
 
 const en: Copy = {
 	meta: {
-		title: 'YGO Tracker',
+		title: 'YGO Tracker: Yu-Gi-Oh! collection and deck tracker',
 		description:
 			'Track your physical Yu-Gi-Oh! cards, see which cards each deck is missing and what it costs to finish, and build a shopping list. Free on iPhone and Android.',
 		ogImageAlt: 'YGO Tracker: organize your Yu-Gi-Oh! collection',
@@ -347,7 +366,7 @@ const en: Copy = {
 		mainNav: 'Page sections',
 		footerNav: 'Footer links',
 	},
-	nav: { features: 'Features', plans: 'Pricing', faq: 'FAQ', guide: 'Guide', download: 'Download' },
+	nav: { features: 'Features', plans: 'Pricing', faq: 'FAQ', guide: 'Guides', download: 'Download' },
 	hero: {
 		eyebrow: 'For people who collect physical cards',
 		title: 'Know exactly what is missing from every Yu-Gi-Oh! deck',
@@ -572,6 +591,15 @@ const en: Copy = {
 		title: 'Page not found',
 		body: 'That card is not in the deck. The address may have changed or never existed.',
 		back: 'Back to the home page',
+	},
+	guides: {
+		seoTitle: 'Yu-Gi-Oh! guides for collectors | YGO Tracker',
+		description:
+			'Practical guides for physical Yu-Gi-Oh! card collectors: organizing a collection, building a spreadsheet, working out what a deck costs and finding cards by their English or Portuguese name.',
+		title: 'Guides for Yu-Gi-Oh! collectors',
+		lead: 'Step-by-step help to organize your physical cards, know what each deck is missing and spend only on what you need.',
+		more: 'More guides',
+		read: 'Read the guide',
 	},
 };
 

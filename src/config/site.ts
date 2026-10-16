@@ -12,8 +12,8 @@ export const PLAY_PACKAGE = 'com.ygotracker';
 export const APP_STORE_URL = `https://apps.apple.com/app/id${APP_STORE_ID}`;
 export const PLAY_STORE_URL = `https://play.google.com/store/apps/details?id=${PLAY_PACKAGE}`;
 
-/** schema.org `applicationCategory`. Keep it in line with the primary category in the store listings. */
-export const APP_CATEGORY = 'EntertainmentApplication';
+/** schema.org `applicationCategory`. Keep it in line with the primary App Store category (Reference). */
+export const APP_CATEGORY = 'ReferenceApplication';
 
 /**
  * App Store Connect → App Analytics → Campaign generator. With it, store clicks from this site show

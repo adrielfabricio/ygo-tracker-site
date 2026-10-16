@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 
 import eyeGlyph from '../assets/eye-glyph.png';
-import { GUIDE_PATHS, translationsOf } from '../config/translations.mjs';
+import { GUIDES_INDEX_PATHS, translationsOf } from '../config/translations.mjs';
 import { COPY } from '../i18n/copy';
 import { LOCALES, LOCALE_META, type Locale } from '../i18n/locales';
 
@@ -33,7 +33,7 @@ const anchor = (id: string) => (sections ? `#${id}` : `${home}#${id}`);
 			<a href={anchor('features')}>{copy.nav.features}</a>
 			<a href={anchor('pricing')}>{copy.nav.plans}</a>
 			<a href={anchor('faq')}>{copy.nav.faq}</a>
-			<a href={GUIDE_PATHS[locale]}>{copy.nav.guide}</a>
+			<a href={GUIDES_INDEX_PATHS[locale]}>{copy.nav.guide}</a>
 		</nav>
 
 		<div class="actions">

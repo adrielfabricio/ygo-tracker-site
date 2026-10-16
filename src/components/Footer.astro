@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 
 import eyeGlyph from '../assets/eye-glyph.png';
 import { AUTHOR, SUPPORT_EMAIL } from '../config/site';
-import { GUIDE_PATHS } from '../config/translations.mjs';
+import { GUIDES_INDEX_PATHS } from '../config/translations.mjs';
 import { COPY } from '../i18n/copy';
 import { LOCALE_META, type Locale } from '../i18n/locales';
 
@@ -41,7 +41,7 @@ const legalLang = locale === 'en' ? undefined : 'en';
 							<a href={`${home}#faq`}>{copy.nav.faq}</a>
 						</li>
 						<li>
-							<a href={GUIDE_PATHS[locale]}>{copy.nav.guide}</a>
+							<a href={GUIDES_INDEX_PATHS[locale]}>{copy.nav.guide}</a>
 						</li>
 					</ul>
 				</div>
