@@ -1,16 +1,19 @@
 # YGO Tracker site
 
-Marketing site for [YGO Tracker](https://github.com/adrielfabricio/ygo-tracker), the app for tracking a physical Yu-Gi-Oh! card collection. It is a static [Astro](https://astro.build) site served by Cloudflare as a static-assets Worker (`ygo-tracker-site`) at https://ygotracker.app. It hosts the landing page in Portuguese and English and the app's legal pages.
+Marketing site for [YGO Tracker](https://github.com/adrielfabricio/ygo-tracker), the app for tracking a physical Yu-Gi-Oh! card collection. It is a static [Astro](https://astro.build) site served by Cloudflare as a static-assets Worker (`ygo-tracker-site`) at https://ygotracker.app. It hosts the landing page in Portuguese and English, the app's legal pages, and the app's password-reset links (association files and landing page).
 
-| Path                        | What                                                                             |
-| --------------------------- | -------------------------------------------------------------------------------- |
-| `/`                         | Landing page, pt-BR (default locale, `x-default`)                                |
-| `/en`                       | Landing page, English                                                            |
-| `/privacy`                  | Privacy policy (English)                                                         |
-| `/terms`                    | Terms of use (English)                                                           |
-| `/support`                  | Support and FAQ (English)                                                        |
-| `/guia`, `/en/guide`        | Guides index; each guide at `/guia/<slug>` and `/en/guide/<slug>`                |
-| `/download`, `/en/download` | Short link: sends phones to their store, shows both badges elsewhere (`noindex`) |
+| Path                        | What                                                                              |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `/`                         | Landing page, pt-BR (default locale, `x-default`)                                 |
+| `/en`                       | Landing page, English                                                             |
+| `/privacy`                  | Privacy policy (English)                                                          |
+| `/terms`                    | Terms of use (English)                                                            |
+| `/support`                  | Support and FAQ (English)                                                         |
+| `/guia`, `/en/guide`        | Guides index; each guide at `/guia/<slug>` and `/en/guide/<slug>`                 |
+| `/download`, `/en/download` | Short link: sends phones to their store, shows both badges elsewhere (`noindex`)  |
+| `/reset-password`           | Password-reset link of the app's email, when it does not open the app (`noindex`) |
+| `/dev/reset-password`       | Same page for the development app (`ygotracker-dev://`), linked from nowhere      |
+| `/.well-known/*`            | App Links / universal links association files for `/reset-password*`              |
 
 ## Commands
 
@@ -41,6 +44,8 @@ To test Cloudflare routing, `_headers` and redirects locally: `npm run build && 
 | Legal documents (source of truth)           | `src/content/legal/*.md`                             |
 | Guides (one file per locale) + slug pairs   | `src/content/guides/`, `src/config/translations.mjs` |
 | Official store badges                       | `public/badges/`                                     |
+| App-link association files                  | `public/.well-known/`                                |
+| Reset landing page                          | `src/components/ResetPasswordPage.astro`             |
 | Ionicons subset (MIT)                       | `src/icons/`                                         |
 | Redirect bundle for the old legal site      | `ops/legal-redirect/`                                |
 
@@ -49,6 +54,8 @@ To test Cloudflare routing, `_headers` and redirects locally: `npm run build && 
 - **Theme:** `src/styles/tokens.css` mirrors `ygo-tracker/src/global/theme/theme.ts`.
 - **Free-tier limits:** `FREE_LIMITS` in `src/config/site.ts` mirrors `FREE_TIER_LIMITS` in `ygo-tracker/src/global/constants/premium.ts`.
 - **Hero mockup:** `src/components/PhoneMockup.astro` rebuilds the app's Dashboard with the app's strings. Update it when the Dashboard changes.
+- **App links:** `public/.well-known/apple-app-site-association` (app `G4P44BRVAX.com.ygotracker`) and `public/.well-known/assetlinks.json` (package `com.ygotracker`, Play app signing and EAS upload key fingerprints) bind `/reset-password*` to the production app. A change of Apple team, bundle id, Android package or signing certificate in the app must land here and be deployed **before** the app build that depends on it. The development app is in neither file.
+- **Password reset:** the reset Worker (`ygo-tracker-password-reset`) links to `/reset-password?oobCode=…&mode=resetPassword` (dev: `/dev/reset-password`). The page's button opens `ygotracker://reset-password` with the same query; keep the path and the scheme in step with the app's `/reset-password` route and `app.config.js`.
 - **Claims:** the copy must describe only what the app does. It does not scan cards with the camera (the camera only reads deck QR codes), it does not fetch market prices (users enter their own), and it has no trading.
 
 ## Deploy

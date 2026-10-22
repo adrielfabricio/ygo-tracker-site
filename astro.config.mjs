@@ -35,7 +35,7 @@ export default defineConfig({
 	],
 	integrations: [
 		sitemap({
-			filter: (page) => !page.endsWith('/download') && !page.endsWith('/404'),
+			filter: (page) => !page.endsWith('/download') && !page.endsWith('/404') && !page.endsWith('/reset-password'),
 			// Same pairs as the hreflang tags in Base.astro; pages without a translation get no alternates.
 			serialize(item) {
 				const path = new URL(item.url).pathname.replace(/(.)\/$/, '$1');

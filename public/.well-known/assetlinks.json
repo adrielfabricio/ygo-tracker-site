@@ -1,0 +1,13 @@
+[
+	{
+		"relation": ["delegate_permission/common.handle_all_urls"],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "com.ygotracker",
+			"sha256_cert_fingerprints": [
+				"B3:15:10:A0:E7:C0:C0:83:0C:82:8E:92:A8:AA:DE:8A:32:02:91:74:6A:0C:A8:AE:AC:DD:ED:A9:E4:2B:D3:76",
+				"95:D0:76:33:9B:6F:74:40:40:04:2F:23:AB:CE:94:78:11:60:F6:F6:0E:E2:36:81:C3:CD:AB:7A:28:8C:2C:56"
+			]
+		}
+	}
+]

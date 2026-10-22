@@ -1,0 +1,10 @@
+{
+	"applinks": {
+		"details": [
+			{
+				"appIDs": ["G4P44BRVAX.com.ygotracker"],
+				"components": [{ "/": "/reset-password*" }]
+			}
+		]
+	}
+}

@@ -75,6 +75,17 @@ export type Copy = {
 		rights: string;
 	};
 	download: { title: string; body: string; redirecting: string };
+	/** Landing page of the password-reset email when the link did not open the app. */
+	resetPassword: {
+		title: string;
+		description: string;
+		phoneBody: string;
+		openApp: string;
+		noApp: string;
+		computerBody: string;
+		missingBody: string;
+		fallbackBody: string;
+	};
 	notFound: { title: string; body: string; back: string };
 	guides: {
 		/** `<title>` of the guides index (≤ 60 characters). */
@@ -329,6 +340,16 @@ const ptBR: Copy = {
 		title: 'Baixar o YGO Tracker',
 		body: 'Escolha a loja do seu celular.',
 		redirecting: 'Abrindo a loja do seu celular…',
+	},
+	resetPassword: {
+		title: 'Redefinir sua senha',
+		description: 'Abra o link de redefinição de senha no app YGO Tracker.',
+		phoneBody: 'Toque no botão para escolher uma nova senha no app.',
+		openApp: 'Abrir no app',
+		noApp: 'Ainda não tem o app? Baixe na loja do seu celular e abra o link do e-mail de novo.',
+		computerBody: 'A senha é trocada no app. Abra este e-mail no celular em que o YGO Tracker está instalado e toque no botão de lá.',
+		missingBody: 'Este link está incompleto. Peça um novo no app, na tela de entrar, em "Esqueceu a senha?".',
+		fallbackBody: 'Abra este e-mail no celular em que o YGO Tracker está instalado. Se o link expirou, peça um novo no app.',
 	},
 	notFound: {
 		title: 'Página não encontrada',
@@ -586,6 +607,17 @@ const en: Copy = {
 		title: 'Download YGO Tracker',
 		body: 'Pick the store for your phone.',
 		redirecting: 'Opening the store for your phone…',
+	},
+	resetPassword: {
+		title: 'Reset your password',
+		description: 'Open your password reset link in the YGO Tracker app.',
+		phoneBody: 'Tap the button to choose a new password in the app.',
+		openApp: 'Open in the app',
+		noApp: "Don't have the app yet? Get it from your phone's store, then open the link in the email again.",
+		computerBody:
+			'Your password is changed in the app. Open this email on the phone where YGO Tracker is installed and tap the button there.',
+		missingBody: 'This link is incomplete. Ask for a new one in the app, on the sign-in screen, under "Forgot password?".',
+		fallbackBody: 'Open this email on the phone where YGO Tracker is installed. If the link has expired, ask for a new one in the app.',
 	},
 	notFound: {
 		title: 'Page not found',
