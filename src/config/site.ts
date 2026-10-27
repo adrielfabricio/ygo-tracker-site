@@ -29,7 +29,7 @@ export const FREE_LIMITS = {
 } as const;
 
 /** Where on the site a store link sits, e.g. `hero` or `final`; reported as the campaign name. */
-export type Placement = 'hero' | 'final' | 'download' | 'guide' | 'reset-password';
+export type Placement = 'hero' | 'final' | 'download' | 'guide' | 'reset-password' | 'deck-link';
 
 const campaign = (locale: Locale, placement: Placement) => `site-${locale}-${placement}`;
 

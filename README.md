@@ -1,19 +1,21 @@
 # YGO Tracker site
 
-Marketing site for [YGO Tracker](https://github.com/adrielfabricio/ygo-tracker), the app for tracking a physical Yu-Gi-Oh! card collection. It is a static [Astro](https://astro.build) site served by Cloudflare as a static-assets Worker (`ygo-tracker-site`) at https://ygotracker.app. It hosts the landing page in Portuguese and English, the app's legal pages, and the app's password-reset links (association files and landing page).
+Marketing site for [YGO Tracker](https://github.com/adrielfabricio/ygo-tracker), the app for tracking a physical Yu-Gi-Oh! card collection. It is a static [Astro](https://astro.build) site served by Cloudflare as a static-assets Worker (`ygo-tracker-site`) at https://ygotracker.app. It hosts the landing page in Portuguese and English, the app's legal pages, the app's password-reset links, and the page deck share links fall back to (association files and landing pages).
 
-| Path                        | What                                                                              |
-| --------------------------- | --------------------------------------------------------------------------------- |
-| `/`                         | Landing page, pt-BR (default locale, `x-default`)                                 |
-| `/en`                       | Landing page, English                                                             |
-| `/privacy`                  | Privacy policy (English)                                                          |
-| `/terms`                    | Terms of use (English)                                                            |
-| `/support`                  | Support and FAQ (English)                                                         |
-| `/guia`, `/en/guide`        | Guides index; each guide at `/guia/<slug>` and `/en/guide/<slug>`                 |
-| `/download`, `/en/download` | Short link: sends phones to their store, shows both badges elsewhere (`noindex`)  |
-| `/reset-password`           | Password-reset link of the app's email, when it does not open the app (`noindex`) |
-| `/dev/reset-password`       | Same page for the development app (`ygotracker-dev://`), linked from nowhere      |
-| `/.well-known/*`            | App Links / universal links association files for `/reset-password*`              |
+| Path                        | What                                                                                  |
+| --------------------------- | ------------------------------------------------------------------------------------- |
+| `/`                         | Landing page, pt-BR (default locale, `x-default`)                                     |
+| `/en`                       | Landing page, English                                                                 |
+| `/privacy`                  | Privacy policy (English)                                                              |
+| `/terms`                    | Terms of use (English)                                                                |
+| `/support`                  | Support and FAQ (English)                                                             |
+| `/guia`, `/en/guide`        | Guides index; each guide at `/guia/<slug>` and `/en/guide/<slug>`                     |
+| `/download`, `/en/download` | Short link: sends phones to their store, shows both badges elsewhere (`noindex`)      |
+| `/reset-password`           | Password-reset link of the app's email, when it does not open the app (`noindex`)     |
+| `/dev/reset-password`       | Same page for the development app (`ygotracker-dev://`), linked from nowhere          |
+| `/d`                        | Deck share link, when it does not open the app: button to open it, badges (`noindex`) |
+| `/dev/d`                    | Same page for the development app (`ygotracker-dev://`), linked from nowhere          |
+| `/.well-known/*`            | App Links / universal links association files for `/reset-password*` and `/d`         |
 
 ## Commands
 
@@ -54,8 +56,9 @@ To test Cloudflare routing, `_headers` and redirects locally: `npm run build && 
 - **Theme:** `src/styles/tokens.css` mirrors `ygo-tracker/src/global/theme/theme.ts`.
 - **Free-tier limits:** `FREE_LIMITS` in `src/config/site.ts` mirrors `FREE_TIER_LIMITS` in `ygo-tracker/src/global/constants/premium.ts`.
 - **Hero mockup:** `src/components/PhoneMockup.astro` rebuilds the app's Dashboard with the app's strings. Update it when the Dashboard changes.
-- **App links:** `public/.well-known/apple-app-site-association` (app `G4P44BRVAX.com.ygotracker`) and `public/.well-known/assetlinks.json` (package `com.ygotracker`, Play app signing and EAS upload key fingerprints) bind `/reset-password*` to the production app. A change of Apple team, bundle id, Android package or signing certificate in the app must land here and be deployed **before** the app build that depends on it. The development app is in neither file.
+- **App links:** `public/.well-known/apple-app-site-association` (app `G4P44BRVAX.com.ygotracker`) and `public/.well-known/assetlinks.json` (package `com.ygotracker`, Play app signing and EAS upload key fingerprints) bind `/reset-password*` and the exact path `/d` to the production app (never a `/d*` prefix: it would capture `/download` and `/dev/…`). A change of Apple team, bundle id, Android package or signing certificate in the app must land here and be deployed **before** the app build that depends on it. The development app is in neither file.
 - **Password reset:** the reset Worker (`ygo-tracker-password-reset`) links to `/reset-password?oobCode=…&mode=resetPassword` (dev: `/dev/reset-password`). The page's button opens `ygotracker://reset-password` with the same query; keep the path and the scheme in step with the app's `/reset-password` route and `app.config.js`.
+- **Deck share links:** the app builds `https://ygotracker.app/d?v=1&name=…&url=ydke://…` (dev: `/dev/d`); the whole deck is in the query. `/d` and `/dev/d` (`DeckLinkPage.astro`) follow the reset pages' rules: `noindex`, out of the sitemap, `no-referrer`, the CSP in `public/_headers`. The page's button opens `ygotracker://decks/import-ydke` with the same query (dev: `ygotracker-dev://`), a route every app build reads; keep it in step with the app. Builds before 1.3.0 that claim the domain open `/d` on their "not found" screen.
 - **Claims:** the copy must describe only what the app does. It does not scan cards with the camera (the camera only reads deck QR codes), it does not fetch market prices (users enter their own), and it has no trading.
 
 ## Deploy

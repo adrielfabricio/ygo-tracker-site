@@ -86,4 +86,4 @@ O [YGO Tracker](/) é um app gratuito para iPhone e Android criado exatamente pa
 - **Lista de compras:** exporte o que falta para levar à loja.
 - **Sem internet:** criar decks e marcar cartas funciona offline, e tudo sincroniza quando a conexão volta.
 
-O plano gratuito cobre 1 deck ativo, até 25 itens na lista de desejos e até 2 coleções. O Acesso Vitalício é um pagamento único, sem assinatura, que libera tudo, incluindo compartilhar e importar decks por QR Code e URL YDKe.
+O plano gratuito cobre 1 deck ativo, até 25 itens na lista de desejos e até 2 coleções. O Acesso Vitalício é um pagamento único, sem assinatura, que libera tudo, incluindo compartilhar decks por link, QR Code e URL YDKe. Importar um deck recebido é grátis, dentro do limite de decks do plano.
