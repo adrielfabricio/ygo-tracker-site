@@ -3,7 +3,7 @@
 		"details": [
 			{
 				"appIDs": ["G4P44BRVAX.com.ygotracker"],
-				"components": [{ "/": "/reset-password*" }]
+				"components": [{ "/": "/reset-password*" }, { "/": "/d" }]
 			}
 		]
 	}

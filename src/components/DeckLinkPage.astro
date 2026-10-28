@@ -1,0 +1,144 @@
+---
+/**
+ * Landing page of a deck share link, for when the link opens in a browser instead of the app: a
+ * chat app's own browser, a phone without the app, an app build that does not claim the link, a dev
+ * build, or a computer. On a phone the button hands the query string, which holds the whole deck, to
+ * the app through its custom scheme; a universal link tapped on its own domain would not open the
+ * app. Nothing opens on its own, and the deck goes nowhere but that button (the page's CSP in
+ * public/_headers blocks every third-party script and connection).
+ *
+ * The link is the same for every receiver, so the page shows Portuguese, then English.
+ */
+import { COPY } from '../i18n/copy';
+import type { Locale } from '../i18n/locales';
+import Base from '../layouts/Base.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import StoreBadges from './StoreBadges.astro';
+
+interface Props {
+	scheme: 'ygotracker' | 'ygotracker-dev';
+}
+
+const { scheme } = Astro.props;
+const sections: { locale: Locale; lang: string; heading: 'h1' | 'h2' }[] = [
+	{ locale: 'pt-br', lang: 'pt-BR', heading: 'h1' },
+	{ locale: 'en', lang: 'en', heading: 'h2' },
+];
+const pt = COPY['pt-br'].deckLink;
+---
+
+<Base locale="pt-br" title={`${pt.title} | YGO Tracker`} description={pt.description} noindex>
+	<meta slot="head" name="referrer" content="no-referrer" />
+	<Header locale="pt-br" />
+	<main id="main" class="container deck-link" data-deck-link data-state="fallback">
+		{sections.map(({ locale, lang, heading: Heading }) => {
+			const copy = COPY[locale].deckLink;
+			return (
+				<section lang={lang}>
+					<Heading class="title">{copy.title}</Heading>
+					<div data-show="phone">
+						<p>{copy.phoneBody}</p>
+						<a class="open-app" href={`${scheme}://decks/import-ydke`} data-open-app>
+							{copy.openApp}
+						</a>
+						<p class="hint">{copy.noApp}</p>
+					</div>
+					<p data-show="computer">{copy.computerBody}</p>
+					<p data-show="missing">{copy.missingBody}</p>
+					<p data-show="fallback">{copy.fallbackBody}</p>
+					<StoreBadges locale={locale} placement="deck-link" class="deck-badges" />
+				</section>
+			);
+		})}
+	</main>
+	<Footer locale="pt-br" />
+</Base>
+
+<script is:inline define:vars={{ scheme }}>
+	const page = document.querySelector('[data-deck-link]');
+	if (page) {
+		const ua = navigator.userAgent;
+		// iPadOS reports itself as a Mac; touch support tells them apart.
+		const phone = /iPhone|iPad|iPod|Android/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+		const deck = new URLSearchParams(location.search).get('url') ?? '';
+		if (!deck.startsWith('ydke://')) {
+			page.dataset.state = 'missing';
+		} else if (!phone) {
+			page.dataset.state = 'computer';
+		} else {
+			// The query string (the deck included) goes only into this link, which opens the app.
+			const href = `${scheme}://decks/import-ydke${location.search}`;
+			page.querySelectorAll('[data-open-app]').forEach((link) => link.setAttribute('href', href));
+			page.dataset.state = 'phone';
+		}
+	}
+</script>
+
+<style>
+	.deck-link {
+		display: grid;
+		gap: var(--space-5);
+		max-width: 560px;
+		padding-block: 80px;
+		text-align: center;
+	}
+
+	section {
+		display: grid;
+		gap: var(--space-3);
+		justify-items: center;
+	}
+
+	section + section {
+		padding-top: var(--space-5);
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.title {
+		font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
+	}
+
+	p {
+		color: var(--color-text-secondary);
+	}
+
+	[data-show] {
+		display: none;
+	}
+
+	.deck-link[data-state='phone'] [data-show='phone'],
+	.deck-link[data-state='computer'] [data-show='computer'],
+	.deck-link[data-state='missing'] [data-show='missing'],
+	.deck-link[data-state='fallback'] [data-show='fallback'] {
+		display: grid;
+		gap: var(--space-3);
+		justify-items: center;
+	}
+
+	.open-app {
+		display: inline-grid;
+		place-items: center;
+		height: 48px;
+		padding: 0 var(--space-4);
+		border-radius: var(--radius-button);
+		background: var(--gradient-primary);
+		box-shadow: var(--glow-cta);
+		color: var(--color-on-primary);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.open-app:hover {
+		color: var(--color-on-primary);
+		filter: brightness(1.08);
+	}
+
+	.hint {
+		font-size: 0.875rem;
+	}
+
+	.deck-link :global(.deck-badges) {
+		justify-content: center;
+	}
+</style>

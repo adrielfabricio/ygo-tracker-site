@@ -86,6 +86,16 @@ export type Copy = {
 		missingBody: string;
 		fallbackBody: string;
 	};
+	deckLink: {
+		title: string;
+		description: string;
+		phoneBody: string;
+		openApp: string;
+		noApp: string;
+		computerBody: string;
+		missingBody: string;
+		fallbackBody: string;
+	};
 	notFound: { title: string; body: string; back: string };
 	guides: {
 		/** `<title>` of the guides index (≤ 60 characters). */
@@ -134,7 +144,7 @@ const ptBR: Copy = {
 		'Coleções por set',
 		'Lista de desejos',
 		'Busca PT e EN',
-		'QR Code',
+		'Link e QR Code',
 		'Funciona offline',
 		'Lista de compras',
 		'Pagamento único',
@@ -193,7 +203,7 @@ const ptBR: Copy = {
 				id: 'shopping',
 				icon: 'clipboard-outline',
 				title: 'Na hora de comprar',
-				body: 'Exporte a lista de compras e chegue no balcão sabendo o que pedir. Pra passar um deck pra alguém, gere um QR Code. Pra receber, escaneie o código ou cole uma URL YDKe.',
+				body: 'Exporte a lista de compras e chegue no balcão sabendo o que pedir. Pra passar um deck pra alguém, mande um link ou mostre um QR Code. Pra receber, abra o link, escaneie o código ou cole uma URL YDKe, e confira as cartas antes de salvar na sua conta.',
 			},
 		],
 		extras: [
@@ -247,8 +257,8 @@ const ptBR: Copy = {
 				{ text: `Até ${L.collections} coleções`, included: true },
 				{ text: 'Busca em português e inglês', included: true },
 				{ text: 'Exportar a lista de compras', included: true },
-				{ text: 'Exportar e importar decks por QR Code', included: false },
-				{ text: 'Copiar e importar URLs YDKe', included: false },
+				{ text: 'Importar decks por link, QR Code ou URL YDKe', included: true },
+				{ text: 'Compartilhar decks por link, QR Code e URL YDKe', included: false },
 			],
 		},
 		premium: {
@@ -263,8 +273,8 @@ const ptBR: Copy = {
 				{ text: 'Coleções ilimitadas', included: true },
 				{ text: 'Busca em português e inglês', included: true },
 				{ text: 'Exportar a lista de compras', included: true },
-				{ text: 'Exportar e importar decks por QR Code', included: true },
-				{ text: 'Copiar e importar URLs YDKe', included: true },
+				{ text: 'Importar decks por link, QR Code ou URL YDKe', included: true },
+				{ text: 'Compartilhar decks por link, QR Code e URL YDKe', included: true },
 			],
 		},
 		note: 'O preço aparece no app, na moeda da loja do seu país. A compra fica na sua conta da App Store ou do Google Play.',
@@ -351,6 +361,16 @@ const ptBR: Copy = {
 		missingBody: 'Este link está incompleto. Peça um novo no app, na tela de entrar, em "Esqueceu a senha?".',
 		fallbackBody: 'Abra este e-mail no celular em que o YGO Tracker está instalado. Se o link expirou, peça um novo no app.',
 	},
+	deckLink: {
+		title: 'Deck compartilhado',
+		description: 'Abra este deck no app YGO Tracker para revisar as cartas e salvar na sua conta.',
+		phoneBody: 'Toque no botão para abrir o deck no app. Você confere as cartas antes de salvar.',
+		openApp: 'Abrir no app',
+		noApp: 'Ainda não tem o app? Baixe na loja do seu celular e abra o link de novo.',
+		computerBody: 'Decks são importados no app. Abra este link no celular em que o YGO Tracker está instalado.',
+		missingBody: 'Este link está incompleto. Peça para a pessoa compartilhar o deck de novo.',
+		fallbackBody: 'Abra este link no celular em que o YGO Tracker está instalado.',
+	},
 	notFound: {
 		title: 'Página não encontrada',
 		body: 'Essa carta não está no deck. O endereço pode ter mudado ou nunca ter existido.',
@@ -400,7 +420,7 @@ const en: Copy = {
 		'Set collections',
 		'Wishlist',
 		'Search in EN and PT',
-		'QR codes',
+		'Links and QR codes',
 		'Works offline',
 		'Shopping list',
 		'One-time payment',
@@ -459,7 +479,7 @@ const en: Copy = {
 				id: 'shopping',
 				icon: 'clipboard-outline',
 				title: 'When you go shopping',
-				body: 'Export your shopping list and walk up to the counter knowing exactly what to ask for. Want to hand a deck to a friend? Generate a QR code. To get theirs, scan the code or paste a YDKe URL.',
+				body: 'Export your shopping list and walk up to the counter knowing exactly what to ask for. Want to hand a deck to a friend? Send a link or show a QR code. To get theirs, open the link, scan the code or paste a YDKe URL, then check the cards before you save it to your account.',
 			},
 		],
 		extras: [
@@ -513,8 +533,8 @@ const en: Copy = {
 				{ text: `Up to ${L.collections} collections`, included: true },
 				{ text: 'Search in English or Portuguese', included: true },
 				{ text: 'Export your shopping list', included: true },
-				{ text: 'Export and import decks by QR code', included: false },
-				{ text: 'Copy and import YDKe URLs', included: false },
+				{ text: 'Import decks by link, QR code or YDKe URL', included: true },
+				{ text: 'Share decks by link, QR code and YDKe URL', included: false },
 			],
 		},
 		premium: {
@@ -529,8 +549,8 @@ const en: Copy = {
 				{ text: 'Unlimited collections', included: true },
 				{ text: 'Search in English or Portuguese', included: true },
 				{ text: 'Export your shopping list', included: true },
-				{ text: 'Export and import decks by QR code', included: true },
-				{ text: 'Copy and import YDKe URLs', included: true },
+				{ text: 'Import decks by link, QR code or YDKe URL', included: true },
+				{ text: 'Share decks by link, QR code and YDKe URL', included: true },
 			],
 		},
 		note: 'The price is shown in the app, in your local store currency. The purchase belongs to your App Store or Google Play account.',
@@ -618,6 +638,16 @@ const en: Copy = {
 			'Your password is changed in the app. Open this email on the phone where YGO Tracker is installed and tap the button there.',
 		missingBody: 'This link is incomplete. Ask for a new one in the app, on the sign-in screen, under "Forgot password?".',
 		fallbackBody: 'Open this email on the phone where YGO Tracker is installed. If the link has expired, ask for a new one in the app.',
+	},
+	deckLink: {
+		title: 'Shared deck',
+		description: 'Open this deck in the YGO Tracker app to check the cards and save it to your account.',
+		phoneBody: 'Tap the button to open the deck in the app. You check the cards before saving.',
+		openApp: 'Open in the app',
+		noApp: "Don't have the app yet? Get it from your phone's store, then open the link again.",
+		computerBody: 'Decks are imported in the app. Open this link on the phone where YGO Tracker is installed.',
+		missingBody: 'This link is incomplete. Ask the person to share the deck again.',
+		fallbackBody: 'Open this link on the phone where YGO Tracker is installed.',
 	},
 	notFound: {
 		title: 'Page not found',
