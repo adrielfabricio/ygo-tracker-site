@@ -65,4 +65,4 @@ If you only track one binder, a spreadsheet is enough. Once you build physical d
 - **Shopping list:** copy what is missing and take it to the shop.
 - **Works offline:** ticking cards and adjusting quantities does not need a signal.
 
-It is free to start, with 1 active deck, up to 25 wishlist items and up to 2 collections.
+It is free to start, with 2 active decks, up to 25 wishlist items and up to 2 collections.

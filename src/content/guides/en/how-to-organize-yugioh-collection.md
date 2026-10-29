@@ -86,4 +86,4 @@ When you go shopping, bring only what is missing: name, quantity and, if it matt
 - **Shopping list:** export what is missing to take to the shop.
 - **Works offline:** creating decks and ticking cards work without a connection, and everything syncs once you are back online.
 
-The free plan covers 1 active deck, up to 25 wishlist items and up to 2 collections. Lifetime Access is a one-time payment with no subscription that unlocks everything, including sharing decks by link, QR code and YDKe URL. Importing a deck someone sent you is free, within the plan's deck limit.
+The free plan covers 2 active decks, up to 25 wishlist items and up to 2 collections. Lifetime Access is a one-time payment with no subscription that unlocks everything, including sharing decks by link, QR code and YDKe URL. Importing a deck someone sent you is free, within the plan's deck limit.

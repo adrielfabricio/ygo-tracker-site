@@ -23,7 +23,7 @@ export const APPLE_PROVIDER_TOKEN = '';
 
 /** Mirrors FREE_TIER_LIMITS in ygo-tracker/src/global/constants/premium.ts. Change both together. */
 export const FREE_LIMITS = {
-	activeDecks: 1,
+	activeDecks: 2,
 	wishlistItems: 25,
 	collections: 2,
 } as const;

@@ -67,4 +67,4 @@ O [YGO Tracker](/) faz as contas deste guia sozinho:
 - **Lista de compras:** copie o que falta e leve para a loja.
 - **Funciona offline:** marcar cartas e ajustar quantidades não depende de sinal.
 
-É grátis para começar, com 1 deck ativo, até 25 itens na lista de desejos e até 2 coleções.
+É grátis para começar, com 2 decks ativos, até 25 itens na lista de desejos e até 2 coleções.

@@ -245,14 +245,14 @@ const ptBR: Copy = {
 	plans: {
 		eyebrow: 'Planos',
 		title: 'Comece grátis. Libere tudo com um pagamento só.',
-		lead: 'O plano gratuito cobre o primeiro deck. Quando ele deixar de dar conta, o Acesso Vitalício tira os limites de vez.',
+		lead: 'O plano gratuito cobre os dois primeiros decks. Quando eles deixarem de dar conta, o Acesso Vitalício tira os limites de vez.',
 		free: {
 			name: 'Gratuito',
 			rarity: 'Comum',
 			price: 'R$ 0',
-			tagline: 'Pra montar o primeiro deck',
+			tagline: 'Pra montar os primeiros decks',
 			lines: [
-				{ text: `${L.activeDecks} deck ativo`, included: true },
+				{ text: `${L.activeDecks} decks ativos`, included: true },
 				{ text: `Até ${L.wishlistItems} itens na lista de desejos`, included: true },
 				{ text: `Até ${L.collections} coleções`, included: true },
 				{ text: 'Busca em português e inglês', included: true },
@@ -265,7 +265,7 @@ const ptBR: Copy = {
 			name: 'Acesso Vitalício',
 			rarity: 'Ultra Rara',
 			price: 'Pagamento único',
-			tagline: 'Pra quem já passou do primeiro deck',
+			tagline: 'Pra quem já passou dos dois primeiros decks',
 			seal: 'Sem assinatura',
 			lines: [
 				{ text: 'Decks ativos ilimitados', included: true },
@@ -287,7 +287,7 @@ const ptBR: Copy = {
 		items: [
 			{
 				question: 'O YGO Tracker é gratuito?',
-				answer: `Sim. Você baixa e usa de graça com ${L.activeDecks} deck ativo, até ${L.wishlistItems} itens na lista de desejos e até ${L.collections} coleções. Pra tirar esses limites, o Acesso Vitalício é um pagamento único, sem assinatura.`,
+				answer: `Sim. Você baixa e usa de graça com ${L.activeDecks} decks ativos, até ${L.wishlistItems} itens na lista de desejos e até ${L.collections} coleções. Pra tirar esses limites, o Acesso Vitalício é um pagamento único, sem assinatura.`,
 			},
 			{
 				question: 'Como saber quais cartas faltam no meu deck?',
@@ -521,14 +521,14 @@ const en: Copy = {
 	plans: {
 		eyebrow: 'Pricing',
 		title: 'Start free. Unlock everything with a single payment.',
-		lead: 'The free plan covers your first deck. When one deck stops being enough, Lifetime Access lifts every limit for good.',
+		lead: 'The free plan covers your first two decks. When two decks stop being enough, Lifetime Access lifts every limit for good.',
 		free: {
 			name: 'Free',
 			rarity: 'Common',
 			price: '$0',
-			tagline: 'For your first deck',
+			tagline: 'For your first decks',
 			lines: [
-				{ text: `${L.activeDecks} active deck`, included: true },
+				{ text: `${L.activeDecks} active decks`, included: true },
 				{ text: `Up to ${L.wishlistItems} wishlist items`, included: true },
 				{ text: `Up to ${L.collections} collections`, included: true },
 				{ text: 'Search in English or Portuguese', included: true },
@@ -541,7 +541,7 @@ const en: Copy = {
 			name: 'Lifetime Access',
 			rarity: 'Ultra Rare',
 			price: 'One-time payment',
-			tagline: 'For when one deck is not enough',
+			tagline: 'For when two decks are not enough',
 			seal: 'No subscription',
 			lines: [
 				{ text: 'Unlimited active decks', included: true },
@@ -563,7 +563,7 @@ const en: Copy = {
 		items: [
 			{
 				question: 'Is YGO Tracker free?',
-				answer: `Yes. You can download and use it for free with ${L.activeDecks} active deck, up to ${L.wishlistItems} wishlist items and up to ${L.collections} collections. To lift those limits, Lifetime Access is a one-time payment with no subscription.`,
+				answer: `Yes. You can download and use it for free with ${L.activeDecks} active decks, up to ${L.wishlistItems} wishlist items and up to ${L.collections} collections. To lift those limits, Lifetime Access is a one-time payment with no subscription.`,
 			},
 			{
 				question: 'How do I know which cards my deck is missing?',
