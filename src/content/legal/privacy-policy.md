@@ -5,7 +5,7 @@ description: 'How YGO Tracker handles your data: what the app collects, what it 
 
 # Privacy Policy — YGO Tracker
 
-**Last updated**: 2026-10-12
+**Last updated**: 2026-10-29
 
 ## Who we are
 
@@ -69,7 +69,7 @@ our error-reporting provider and are not linked to your collection data.
 ## Your choices
 
 - **Delete your account.** Settings → Account → delete. This removes your data and your sign-in.
-- **Export your decks.** Deck sharing lets you copy your lists out of the app at any time.
+- **Export your data.** You can export your collections, decks and wishlist as CSV files, and share a collection as an image, at any time. The file or image is built on your device and goes only to the app you pick in the share sheet; we never receive it. Deck sharing also lets you copy a deck out of the app as a link, a QR code or a YDKe URL.
 - **Language and preferences** are stored on your device only and never leave it.
 
 ## Children
