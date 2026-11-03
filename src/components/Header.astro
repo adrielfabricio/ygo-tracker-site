@@ -10,15 +10,17 @@ interface Props {
 	locale: Locale;
 	/** In-page section links; only the landing page has those sections. */
 	sections?: boolean;
+	/** Where the language switch goes when the page is not in `TRANSLATIONS` (the reset page). */
+	langHref?: string;
 }
 
-const { locale, sections = false } = Astro.props;
+const { locale, sections = false, langHref } = Astro.props;
 const copy = COPY[locale];
 const home = LOCALE_META[locale].home;
 const other = LOCALES.find((l) => l !== locale)!;
 // The language switch keeps you on the same page when it has a translation.
 const currentPath = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/(.)\/$/, '$1') || '/';
-const otherHref = translationsOf(currentPath)?.[other] ?? LOCALE_META[other].home;
+const otherHref = langHref ?? translationsOf(currentPath)?.[other] ?? LOCALE_META[other].home;
 const anchor = (id: string) => (sections ? `#${id}` : `${home}#${id}`);
 ---
 
@@ -37,7 +39,7 @@ const anchor = (id: string) => (sections ? `#${id}` : `${home}#${id}`);
 		</nav>
 
 		<div class="actions">
-			<a class="lang" href={otherHref} hreflang={LOCALE_META[other].htmlLang} lang={LOCALE_META[other].htmlLang}>
+			<a class="lang" data-lang-switch href={otherHref} hreflang={LOCALE_META[other].htmlLang} lang={LOCALE_META[other].htmlLang}>
 				{other === 'en' ? 'EN' : 'PT'}
 				<span class="sr-only"> · {LOCALE_META[other].nativeName}</span>
 			</a>
