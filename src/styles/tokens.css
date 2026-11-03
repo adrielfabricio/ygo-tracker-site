@@ -1,5 +1,5 @@
 /*
- * Mirrors ygo-tracker/src/global/theme/theme.ts and docs/standards/styling-and-theme.md.
+ * Mirrors ygo-tracker/src/global/theme/ (colors.ts, spacing.ts, typography.ts) and docs/standards/styling-and-theme.md.
  * The app is dark only, gold on warm olive-black. No purple, cyan or blue accents.
  */
 :root {
@@ -50,7 +50,7 @@
 	--radius-hero: 20px;
 	--radius-pill: 999px;
 
-	/* Spacing (theme.ts Spacing) */
+	/* Spacing (theme spacing scale) */
 	--space-half: 2px;
 	--space-1: 4px;
 	--space-2: 8px;
