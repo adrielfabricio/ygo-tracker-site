@@ -1,3 +1,4 @@
+import CalculatorOutline from './calculator-outline.svg';
 import Checkmark from './checkmark.svg';
 import ChevronDown from './chevron-down.svg';
 import ClipboardOutline from './clipboard-outline.svg';
@@ -13,6 +14,7 @@ import StatsChartOutline from './stats-chart-outline.svg';
 
 /** Ionicons names, as used by the app through `@expo/vector-icons`. */
 export const ICONS = {
+	'calculator-outline': CalculatorOutline,
 	checkmark: Checkmark,
 	'chevron-down': ChevronDown,
 	'clipboard-outline': ClipboardOutline,

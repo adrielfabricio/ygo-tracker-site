@@ -247,7 +247,7 @@ const SCREENS: Partial<Record<FeatureId, { src: ImageMetadata; alt: string; focu
 		color: var(--color-text-secondary);
 	}
 
-	/* Text-only cards (offline, account, the duel table, the odds): no screen to show. */
+	/* Text-only cards (offline, account, the duel table, the odds, the life point counter): no screen to show. */
 	.extras {
 		display: grid;
 		gap: var(--space-3);
@@ -257,6 +257,10 @@ const SCREENS: Partial<Record<FeatureId, { src: ImageMetadata; alt: string; focu
 	@media (min-width: 860px) {
 		.extras {
 			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.extra:last-child:nth-child(odd) {
+			grid-column: 1 / -1;
 		}
 	}
 
