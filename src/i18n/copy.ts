@@ -2,7 +2,7 @@ import { FREE_LIMITS } from '../config/site';
 import type { IconName } from '../icons';
 import type { Locale } from './locales';
 
-export type FeatureId = 'decks' | 'collections' | 'wishlist' | 'search' | 'shopping' | 'offline' | 'account';
+export type FeatureId = 'decks' | 'collections' | 'wishlist' | 'search' | 'shopping' | 'offline' | 'account' | 'table' | 'odds';
 type Item = { id: FeatureId; icon: IconName; title: string; body: string };
 type PlanLine = { text: string; included: boolean };
 
@@ -218,6 +218,18 @@ const ptBR: Copy = {
 				icon: 'person-circle-outline',
 				title: 'Seus dados, na sua conta',
 				body: 'Trocou de celular? Faça login e está tudo lá. Se um dia quiser sair, você apaga a conta e tudo que tem nela direto no app.',
+			},
+			{
+				id: 'table',
+				icon: 'dice-outline',
+				title: 'Mesa para testar a mão',
+				body: 'Compre a mão inicial do seu deck e veja o que daria pra fazer com ela. Você mesmo move as cartas pelo campo: invoca, manda pro Cemitério, busca no deck, tira do Extra Deck. O app não joga por você e não lê efeito de carta, só segura as cartas no lugar. Errou? Desfaça. Quer outra mão? Reinicie.',
+			},
+			{
+				id: 'odds',
+				icon: 'stats-chart-outline',
+				title: 'Chance de abrir bem',
+				body: 'Escolha as cartas que começam o combo e veja a chance exata de tê-las na mão inicial, indo primeiro ou segundo. Dá pra combinar até três grupos, como uma carta inicial e uma que estende a jogada.',
 			},
 		],
 	},
@@ -498,6 +510,18 @@ const en: Copy = {
 				icon: 'person-circle-outline',
 				title: 'Your data, your account',
 				body: 'New phone? Sign in and it is all there. If you ever want out, you can delete your account and everything in it from inside the app.',
+			},
+			{
+				id: 'table',
+				icon: 'dice-outline',
+				title: 'A table to test your hand',
+				body: 'Draw an opening hand from your deck and see what you could do with it. You move the cards across the field yourself: summon, send to the Graveyard, search the deck, bring out an Extra Deck monster. The app does not play for you or read card effects; it just holds the cards in place. Misplayed? Undo. Want another hand? Restart.',
+			},
+			{
+				id: 'odds',
+				icon: 'stats-chart-outline',
+				title: 'Odds of a good opening',
+				body: 'Pick the cards that start your combo and see the exact chance of drawing them in your opening hand, going first or second. Combine up to three groups, such as a starter and an extender.',
 			},
 		],
 	},
