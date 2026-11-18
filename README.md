@@ -16,6 +16,7 @@ Marketing site for [YGO Tracker](https://github.com/adrielfabricio/ygo-tracker),
 | `/d`                        | Deck share link, when it does not open the app: button to open it, badges (`noindex`) |
 | `/dev/d`                    | Same page for the development app (`ygotracker-dev://`), linked from nowhere          |
 | `/.well-known/*`            | App Links / universal links association files for `/reset-password*` and `/d`         |
+| `/.well-known/security.txt` | How to report a vulnerability (RFC 9116); renew `Expires` before it passes            |
 
 ## Commands
 
@@ -49,7 +50,6 @@ To test Cloudflare routing, `_headers` and redirects locally: `npm run build && 
 | App-link association files                  | `public/.well-known/`                                |
 | Reset landing page                          | `src/components/ResetPasswordPage.astro`             |
 | Ionicons subset (MIT)                       | `src/icons/`                                         |
-| Redirect bundle for the old legal site      | `ops/legal-redirect/`                                |
 
 ## Keeping in sync with the app
 
@@ -79,19 +79,7 @@ One-time setup for CI deploys:
 
 ### Changing the domain
 
-The origin appears in `astro.config.mjs` (`SITE`), in `wrangler.jsonc` (`routes`) and in `ops/legal-redirect/`. Canonical URLs, hreflang, Open Graph, `robots.txt` and the sitemap all derive from `SITE`.
-
-### Retiring the old legal site
-
-The legal pages used to live at `ygo-tracker-legal.pages.dev`. After the site is live on its domain, deploy the redirect bundle to that project once:
-
-```bash
-npx wrangler pages deploy ops/legal-redirect --project-name ygo-tracker-legal --branch main --force
-```
-
-`--force` keeps Wrangler from delegating the command to Workers: `ygo-tracker-legal` is an existing Pages project.
-
-Every old URL, with or without `.html`, then answers with a 301 to the same path on the new domain.
+The origin appears in `astro.config.mjs` (`SITE`) and in `wrangler.jsonc` (`routes`). Canonical URLs, hreflang, Open Graph, `robots.txt` and the sitemap all derive from `SITE`.
 
 ## Trademarks
 

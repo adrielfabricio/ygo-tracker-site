@@ -6,7 +6,7 @@ import { translationsOf } from './src/config/translations.mjs';
 
 /**
  * Production origin. Canonical URLs, hreflang, Open Graph, robots.txt and the sitemap all derive
- * from it; wrangler.jsonc and ops/legal-redirect/ repeat the domain.
+ * from it; wrangler.jsonc repeats the domain.
  */
 const SITE = 'https://ygotracker.app';
 
