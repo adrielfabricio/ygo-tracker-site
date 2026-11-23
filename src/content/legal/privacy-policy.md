@@ -5,7 +5,7 @@ description: 'How YGO Tracker handles your data: what the app collects, what it 
 
 # Privacy Policy — YGO Tracker
 
-**Last updated**: 2026-10-29
+**Last updated**: 2026-11-22
 
 ## Who we are
 
@@ -21,6 +21,8 @@ shares with us. We never receive or store your password for those providers.
 **Your collection data.** Decks, deck cards, set collections, ownership state, and wishlist
 entries that you create in the app. Card details such as name and artwork reference are stored
 alongside your entries so the app works offline.
+
+**Public profile, duels and scoreboard.** Each account has a username and a duelist name. Your profile is private by default: only you see it. If you make it public, other signed-in users can see your username, your duelist name, the badges you earned (which ones and when), your scoreboard (how many duels you played, won and lost) and any deck or collection you chose to make public. When you pair with another player at the same table, the app stores one duel record shared by the two of you: both usernames and duelist names as they were then, the outcome, both final Life Point totals and the date. Only the two players can read it. A duel counts on the scoreboard only after the other player confirms it, and it then adds to both players' scoreboards. A scoreboard never goes down.
 
 **Purchase status.** If you buy the lifetime unlock, we store a flag indicating that the
 purchase is active, when it was last updated, and which entitlement it refers to. The purchase
@@ -42,7 +44,7 @@ transmitted.
 ## Where your data lives
 
 Account and collection data is stored in Google Cloud Firestore. Access is restricted so that
-only your signed-in account can read or write your own records. Diagnostics are processed by
+only your signed-in account can read or write your own records, except the public parts described above, which other signed-in users can read only while you keep your profile public. Diagnostics are processed by
 Sentry. Card artwork is served from Cloudflare R2 and involves no personal data.
 
 When you ask to reset your password, your email address goes through a Cloudflare Worker to
@@ -63,13 +65,16 @@ how many installs started on this site; the tag does not identify you either.
 ## How long we keep it
 
 Your data is retained while your account exists. Deleting your account from Settings removes
-your collection data and account record. Diagnostic reports are retained on a rolling window by
+your collection data, account record, public profile, scoreboard and badges. A duel that the other
+player confirmed stays in their history with your username, duelist name and account identifier
+removed; duels nobody confirmed are deleted. Diagnostic reports are retained on a rolling window by
 our error-reporting provider and are not linked to your collection data.
 
 ## Your choices
 
 - **Delete your account.** Settings → Account → delete. This removes your data and your sign-in.
 - **Export your data.** You can export your collections, decks and wishlist as CSV files, and share a collection as an image, at any time. The file or image is built on your device and goes only to the app you pick in the share sheet; we never receive it. Deck sharing also lets you copy a deck out of the app as a link, a QR code or a YDKe URL.
+- **Keep your profile private.** Your profile, and so your scoreboard, is visible to others only while you set it to public in Settings → Profile. Turning it private hides it again at once.
 - **Language and preferences** are stored on your device only and never leave it.
 
 ## Children
