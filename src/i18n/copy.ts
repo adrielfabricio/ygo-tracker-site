@@ -3,7 +3,19 @@ import type { IconName } from '../icons';
 import type { Locale } from './locales';
 
 export type FeatureId =
-	'decks' | 'collections' | 'wishlist' | 'search' | 'shopping' | 'offline' | 'account' | 'table' | 'odds' | 'lifePoints';
+	| 'decks'
+	| 'collections'
+	| 'wishlist'
+	| 'search'
+	| 'shopping'
+	| 'offline'
+	| 'account'
+	| 'profile'
+	| 'showcase'
+	| 'duels'
+	| 'table'
+	| 'odds'
+	| 'lifePoints';
 type Item = { id: FeatureId; icon: IconName; title: string; body: string };
 type PlanLine = { text: string; included: boolean };
 
@@ -148,6 +160,8 @@ const ptBR: Copy = {
 		'Link e QR Code',
 		'Funciona offline',
 		'Lista de compras',
+		'Perfil de duelista',
+		'Placar de duelos',
 		'Pagamento único',
 	],
 	problem: {
@@ -192,13 +206,13 @@ const ptBR: Copy = {
 				id: 'wishlist',
 				icon: 'heart-outline',
 				title: 'Lista de desejos com preço de referência',
-				body: 'As cartas que você está caçando ficam numa lista à parte, com quantidade e preço. Mudou de ideia? Mova a carta pra dentro de um deck.',
+				body: 'As cartas que você está caçando ficam numa lista à parte, com quantidade e preço. Chegou a hora de montar? Copie a carta pra um deck.',
 			},
 			{
 				id: 'search',
 				icon: 'search-outline',
-				title: 'Busca em português e em inglês',
-				body: 'Digite o nome em qualquer um dos dois idiomas. O app acha a carta e mostra a arte, o que ajuda quando você aprendeu o nome traduzido e a loja lista tudo em inglês.',
+				title: 'Cartas em português, busca nos dois idiomas',
+				body: 'Com o app em português, o nome e o texto das cartas aparecem em português. Na busca, digite o nome em qualquer um dos dois idiomas: o app acha a carta e mostra a arte, o que ajuda quando você aprendeu o nome traduzido e a loja lista tudo em inglês.',
 			},
 			{
 				id: 'shopping',
@@ -221,6 +235,24 @@ const ptBR: Copy = {
 				body: 'Trocou de celular? Faça login e está tudo lá. Se um dia quiser sair, você apaga a conta e tudo que tem nela direto no app.',
 			},
 			{
+				id: 'profile',
+				icon: 'people-outline',
+				title: 'Perfil de duelista',
+				body: 'Escolha seu nome de usuário e mostre suas insígnias e seu placar de duelos. O perfil fica privado até você decidir publicar. Na aba Buscar, ache outros duelistas pelo nome de usuário. Viu algo ofensivo? Denuncie. Não quer ver alguém? Bloqueie, sem que a pessoa seja avisada.',
+			},
+			{
+				id: 'showcase',
+				icon: 'albums-outline',
+				title: 'Decks e coleções públicos',
+				body: 'Com o perfil público, escolha quais decks e coleções aparecem nele. Quem visita vê as cartas e pode copiar o deck ou a coleção pra própria conta. Preço nunca aparece, e tornar privado tira do ar na hora.',
+			},
+			{
+				id: 'duels',
+				icon: 'trophy-outline',
+				title: 'Duelos com histórico',
+				body: 'Na mesma mesa, um duelista mostra um QR Code e o outro lê pelo contador de Pontos de Vida. No fim, um envia o resultado e o outro confirma: só então o duelo entra no histórico dos dois e conta no placar de vitórias e derrotas.',
+			},
+			{
 				id: 'table',
 				icon: 'dice-outline',
 				title: 'Mesa para testar a mão',
@@ -236,7 +268,7 @@ const ptBR: Copy = {
 				id: 'lifePoints',
 				icon: 'calculator-outline',
 				title: 'Contador de Pontos de Vida',
-				body: 'Vai duelar com cartas físicas? Vire o celular na horizontal: Duelista 01 e Duelista 02 começam com 8000, e uma calculadora soma, tira ou corta pela metade. Tem também um dado e uma moeda na tela, pra decidir quem começa ou resolver um efeito: é só tocar fora pra fechar. Funciona sem internet e guarda o duelo se você sair do app.',
+				body: 'Vai duelar com cartas físicas? Deixe o celular na horizontal entre os dois: cada duelista lê o próprio total de frente, a partir de 8000, e uma calculadora soma, tira ou corta pela metade. Tem também um dado e uma moeda na tela, pra decidir quem começa ou resolver um efeito. Funciona sem internet.',
 			},
 		],
 	},
@@ -320,7 +352,7 @@ const ptBR: Copy = {
 			{
 				question: 'Dá para buscar cartas pelo nome em português?',
 				answer:
-					'Dá. A busca entende o nome em português e em inglês e mostra a arte da carta. Ajuda quando você conhece o nome traduzido e a loja lista tudo em inglês.',
+					'Dá. A busca entende o nome em português e em inglês e mostra a arte da carta. E com o app em português, o nome e o texto das cartas aparecem em português, quando a carta tem tradução; as outras ficam em inglês.',
 			},
 			{
 				question: 'Os preços são valores de mercado?',
@@ -330,7 +362,7 @@ const ptBR: Copy = {
 			{
 				question: 'O app funciona sem internet?',
 				answer:
-					'Funciona. Dá pra criar e editar decks, marcar cartas e ajustar quantidades offline, e tudo sincroniza quando a conexão volta. A busca de cartas precisa de internet, porque consulta uma base de dados externa.',
+					'Funciona. Dá pra criar e editar decks, marcar cartas e ajustar quantidades offline, e tudo sincroniza quando a conexão volta. A busca de cartas precisa de internet, porque consulta uma base de dados externa, e a busca de duelistas e o envio do resultado de um duelo também.',
 			},
 			{
 				question: 'Troquei de celular. Perco meus decks?',
@@ -339,7 +371,12 @@ const ptBR: Copy = {
 			{
 				question: 'O app escaneia cartas pela câmera?',
 				answer:
-					'Não. A câmera serve pra ler o QR Code de um deck que alguém compartilhou com você. Pra adicionar cartas, você usa a busca, em português ou em inglês.',
+					'Não. A câmera serve pra ler o QR Code de um deck que alguém compartilhou com você ou de um duelo pareado. Pra adicionar cartas, você usa a busca, em português ou em inglês.',
+			},
+			{
+				question: 'Outras pessoas veem minha coleção?',
+				answer:
+					'Só o que você publicar. O perfil nasce privado; com ele público, outros duelistas veem seu nome de usuário, nome de duelista, insígnias e placar, e só os decks e coleções que você marcar como públicos, sem preços. Seu e-mail nunca aparece.',
 			},
 			{
 				question: 'É um app oficial da Konami?',
@@ -349,7 +386,7 @@ const ptBR: Copy = {
 			{
 				question: 'Como apago minha conta?',
 				answer:
-					'No app, em Configurações, Conta, Excluir conta. A exclusão é imediata e remove seus decks, coleções e lista de desejos. A compra do Acesso Vitalício continua na sua conta da loja e pode ser restaurada numa conta nova.',
+					'No app, em Configurações, Conta, Excluir conta. A exclusão é imediata e remove seus decks, coleções, lista de desejos e seu perfil. Um duelo confirmado continua no histórico do oponente, sem o seu nome. A compra do Acesso Vitalício continua na sua conta da loja e pode ser restaurada numa conta nova.',
 			},
 		],
 	},
@@ -446,6 +483,8 @@ const en: Copy = {
 		'Links and QR codes',
 		'Works offline',
 		'Shopping list',
+		'Duelist profile',
+		'Duel scoreboard',
 		'One-time payment',
 	],
 	problem: {
@@ -490,13 +529,13 @@ const en: Copy = {
 				id: 'wishlist',
 				icon: 'heart-outline',
 				title: 'Wishlist with reference prices',
-				body: 'The cards you are hunting live in their own list, with quantity and price. Changed your mind? Move a card straight into a deck.',
+				body: 'The cards you are hunting live in their own list, with quantity and price. Ready to build? Copy a card into a deck.',
 			},
 			{
 				id: 'search',
 				icon: 'search-outline',
-				title: 'Search in English or Portuguese',
-				body: 'Type the name in either language. The app finds the card and shows the art, which helps when you learned one name and the shop lists the other.',
+				title: 'Cards in your language, search in both',
+				body: "Card names and text follow the app's language, English or Portuguese. In search, type the name in either language: the app finds the card and shows the art, which helps when you learned one name and the shop lists the other.",
 			},
 			{
 				id: 'shopping',
@@ -519,6 +558,24 @@ const en: Copy = {
 				body: 'New phone? Sign in and it is all there. If you ever want out, you can delete your account and everything in it from inside the app.',
 			},
 			{
+				id: 'profile',
+				icon: 'people-outline',
+				title: 'Duelist profile',
+				body: "Pick your username and show your badges and your duel scoreboard. Your profile stays private until you choose to publish it. In the Search tab, find other duelists by username. Seen something offensive? Report it. Don't want to see someone? Block them; they are not told.",
+			},
+			{
+				id: 'showcase',
+				icon: 'albums-outline',
+				title: 'Public decks and collections',
+				body: 'With a public profile, choose which decks and collections show on it. Visitors see the cards and can copy the deck or collection to their own account. Prices never show, and making one private takes it down at once.',
+			},
+			{
+				id: 'duels',
+				icon: 'trophy-outline',
+				title: 'Duels with a history',
+				body: 'At the same table, one duelist shows a QR code and the other reads it from the Life Point counter. At the end, one sends the result and the other confirms it: only then does the duel go into both histories and count on the win and loss scoreboard.',
+			},
+			{
 				id: 'table',
 				icon: 'dice-outline',
 				title: 'A table to test your hand',
@@ -534,7 +591,7 @@ const en: Copy = {
 				id: 'lifePoints',
 				icon: 'calculator-outline',
 				title: 'Life Point Counter',
-				body: 'Dueling with physical cards? Turn your phone sideways: Duelist 01 and Duelist 02 start at 8000, and a calculator adds, subtracts or halves. There is also a die and a coin on screen, to decide who goes first or resolve an effect: just tap outside to close. It works offline and keeps the duel if you leave the app.',
+				body: 'Dueling with physical cards? Lay your phone sideways between you: each duelist reads their own total facing them, from 8000, and a calculator adds, subtracts or halves. There is also a die and a coin on screen, to decide who goes first or resolve an effect. It works offline.',
 			},
 		],
 	},
@@ -618,7 +675,7 @@ const en: Copy = {
 			{
 				question: 'Can I search cards by their Portuguese names?',
 				answer:
-					'Yes. Search understands both English and Portuguese card names and shows the card art, which helps if you play with Portuguese cards and buy from shops that list them in English.',
+					'Yes. Search understands both English and Portuguese card names and shows the card art, which helps if you play with Portuguese cards and buy from shops that list them in English. With the app in Portuguese, card names and text show in Portuguese wherever the card has a translation.',
 			},
 			{
 				question: 'Are the prices real market values?',
@@ -628,7 +685,7 @@ const en: Copy = {
 			{
 				question: 'Does the app work without internet?',
 				answer:
-					'Yes. You can create and edit decks, tick cards and adjust quantities offline, and everything syncs once you are back online. Card search needs a connection because it queries an external database.',
+					'Yes. You can create and edit decks, tick cards and adjust quantities offline, and everything syncs once you are back online. Card search needs a connection because it queries an external database, and so do finding duelists and sending a duel result.',
 			},
 			{
 				question: 'I got a new phone. Do I lose my decks?',
@@ -638,7 +695,12 @@ const en: Copy = {
 			{
 				question: 'Does the app scan cards with the camera?',
 				answer:
-					'No. The camera reads the QR code of a deck someone shared with you. To add cards, you use search, in English or Portuguese.',
+					'No. The camera reads the QR code of a deck someone shared with you or of a paired duel. To add cards, you use search, in English or Portuguese.',
+			},
+			{
+				question: 'Can other people see my collection?',
+				answer:
+					'Only what you publish. Your profile starts private; once it is public, other duelists see your username, duelist name, badges and scoreboard, and only the decks and collections you mark as public, with no prices. Your email never shows.',
 			},
 			{
 				question: 'Is this an official Konami app?',
@@ -648,7 +710,7 @@ const en: Copy = {
 			{
 				question: 'How do I delete my account?',
 				answer:
-					'In the app, go to Settings, Account, Delete account. Deletion is immediate and removes your decks, collections and wishlist. Lifetime Access stays with your store account and can be restored on a new account.',
+					"In the app, go to Settings, Account, Delete account. Deletion is immediate and removes your decks, collections, wishlist and profile. A confirmed duel stays in your opponent's history, without your name. Lifetime Access stays with your store account and can be restored on a new account.",
 			},
 		],
 	},
