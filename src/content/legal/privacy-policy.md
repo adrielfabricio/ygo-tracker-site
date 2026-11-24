@@ -95,7 +95,7 @@ Deleting your account also deletes your username, the public copies of your deck
 - **Choose what is public.** A deck or collection is public only while you turn on "Public on my profile" on it; turning it off deletes its public copy. Making your profile private hides all of them without deleting anything.
 - **Block someone.** From their profile, one of their public decks or collections, or your duel history. Unblock in Settings → Account → Blocked users.
 - **Report something.** From the profile, the public deck or collection, or your duel history.
-- **Contest a moderation decision.** Write to the moderation contact, adrielfabricio.dev@gmail.com (also in Settings → About → Moderation contact), with your username and what was hidden.
+- **Contest a moderation decision.** Write to the moderation contact, moderation@ygotracker.app (also in Settings → About → Moderation contact), with your username and what was hidden.
 - **Language and preferences** are stored on your device only and never leave it.
 
 ## Children

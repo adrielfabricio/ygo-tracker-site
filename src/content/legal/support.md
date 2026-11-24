@@ -85,7 +85,7 @@ To unblock, open **Settings → Account → Blocked users** and tap **Unblock**,
 
 Someone reported it and the moderator found that it breaks the [Terms of Use](/terms): an offensive name or description, harassment, impersonation or spam. The app shows the reason, and you also got an email. Nothing was deleted, and other duelists cannot see it while it is hidden.
 
-If it was hidden for your username or duelist name, change it in Edit profile: the profile stays hidden until the moderator reviews the new name. To contest the decision, write to the moderation contact, **adrielfabricio.dev@gmail.com** (also in Settings → About → Moderation contact), with your username and what was hidden.
+If it was hidden for your username or duelist name, change it in Edit profile: the profile stays hidden until the moderator reviews the new name. To contest the decision, write to the moderation contact, **moderation@ygotracker.app** (also in Settings → About → Moderation contact), with your username and what was hidden.
 
 ### How does a paired duel work?
 

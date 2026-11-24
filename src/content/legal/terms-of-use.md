@@ -54,7 +54,7 @@ Do not publish, or use a username or duelist name, that:
 
 You can report a profile, a public deck or a public collection from its screen, or an opponent from your duel history, and you can block any user. A block is private: the other person is not told.
 
-We may hide content that breaks these terms, and disable the account of anyone who breaks them seriously or repeatedly. Hidden content is not deleted: you are told why in the app and by email, and it comes back if the decision is reversed. To contest a decision, write to the moderation contact, adrielfabricio.dev@gmail.com (also in Settings → About → Moderation contact), with your username and what was hidden.
+We may hide content that breaks these terms, and disable the account of anyone who breaks them seriously or repeatedly. Hidden content is not deleted: you are told why in the app and by email, and it comes back if the decision is reversed. To contest a decision, write to the moderation contact, moderation@ygotracker.app (also in Settings → About → Moderation contact), with your username and what was hidden.
 
 ## Life Point Counter and paired duels
 
