@@ -4,6 +4,7 @@ description: 'Por que a mesma carta de Yu-Gi-Oh! tem nome diferente em portuguê
 seoTitle: 'Cartas de Yu-Gi-Oh! em português e inglês | YGO Tracker'
 locale: 'pt-br'
 published: 2026-10-16
+updated: 2026-11-23
 ---
 
 Quem coleciona Yu-Gi-Oh! no Brasil convive com dois nomes para a mesma carta. As cartas impressas em português têm nomes traduzidos, mas decklists, bancos de dados e muitas lojas usam o nome em inglês. Saber os dois evita busca sem resultado e, pior, compra da carta errada.
@@ -48,6 +49,6 @@ Repare nos dois últimos: alguns nomes não são traduzidos e ficam iguais nos d
 
 ## Busca nos dois idiomas no YGO Tracker
 
-O [YGO Tracker](/) busca a carta pelo nome em português ou em inglês e mostra a arte, então você não precisa saber a tradução de cabeça. Digite "Mago Negro" ou "Dark Magician" e chegue na mesma carta.
+O [YGO Tracker](/) busca a carta pelo nome em português ou em inglês e mostra a arte, então você não precisa saber a tradução de cabeça. Digite "Mago Negro" ou "Dark Magician" e chegue na mesma carta. Com o app em português, o nome e o texto das cartas aparecem em português sempre que a carta tem tradução; as que ainda não têm ficam em inglês.
 
 A partir daí, dá para adicionar a carta a um deck, a uma coleção ou à lista de desejos, anotar quantas cópias você tem e levar a lista do que falta para a loja. O app funciona no iPhone e no Android e é grátis para começar.

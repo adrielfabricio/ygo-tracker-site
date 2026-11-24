@@ -4,6 +4,7 @@ description: 'Why the same Yu-Gi-Oh! card has a different name in Portuguese and
 seoTitle: 'Yu-Gi-Oh! Card Names in Portuguese and English | YGO Tracker'
 locale: 'en'
 published: 2026-10-16
+updated: 2026-11-23
 ---
 
 Collectors who buy Yu-Gi-Oh! cards in Brazil, or trade with players there, deal with two names for the same card. Cards printed in Portuguese have translated names, while decklists, databases and many shops use the English name. Knowing both saves you from searches that return nothing and, worse, from buying the wrong card.
@@ -47,6 +48,6 @@ Note the last two: some names are not translated and stay the same in both langu
 
 ## Search in both languages with YGO Tracker
 
-[YGO Tracker](/en) finds a card by its English or Portuguese name and shows the artwork, so you do not need to know the translation by heart. Type "Dark Magician" or "Mago Negro" and land on the same card.
+[YGO Tracker](/en) finds a card by its English or Portuguese name and shows the artwork, so you do not need to know the translation by heart. Type "Dark Magician" or "Mago Negro" and land on the same card. With the app in Portuguese, card names and text show in Portuguese wherever the card has a translation, and in English otherwise.
 
 From there you can add the card to a deck, a collection or your wishlist, record how many copies you own and take the list of what is missing to the shop. The app runs on iPhone and Android and is free to start.
